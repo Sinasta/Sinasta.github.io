@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
+
+    <!-- Todo: put here your site title -->
+    <title>FLOOR PLAN GENERATION</title>
+    <!-- Todo: add some coding keywords below - e.g: (javascript, yourusername, etc) -->
+    <meta name="keywords" content="Raban Ohlhoff, architecture, portfolio" />
+    <!-- Todo: improve your SEO by adding a small description of you -->
+    <meta name="description" content="Raban Ohlhoff | Student in Architecture" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="styles.scss" />
+    <script
+      defer
+      src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"
+    ></script>
+  </head>
+
+  <!-- Todo: read the following HTML Todos to create your stunning portfolio website -->
+  <body style="background-color:#121212">
+    <div id="top"></div>
+
+    <!-- **** Projects Section **** -->
+    <section id="projects">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-2 col-sm-12">
+          <div class="project-wrapper__text load-hidden">
+            </div>
+              <a
+                rel="noreferrer"
+                target="_self"
+                class="cta-btn--hero cta-btn"
+                href="projects.html"
+              >
+                All Projects
+              </a>
+            </div>
+          </div>
+        </div>
+      <p>
+        <br>
+      </p> 
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text">FLOOR PLAN GENERATION<small><small><small> 2022</small></small></small></h2>
+
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <div>
+                  <p class="mb-4">
+                    Work In Progress <br>
+                    <br>
+                    <small><small><strong>TECHNIQUES :</strong> Python | Blender | Sverchok</small></small>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" target="_blank">
+                  <div id="chart"></div>
+                     <script src="./scripts/d3.min.js"></script>
+                     <script>
+
+                     var ratio = window.devicePixelRatio || 1,
+                         width = 960 * ratio,
+                         height = 480 * ratio,
+                         n = 100,
+                         vertices;
+
+                     var voronoi = d3.geom.voronoi()
+                         .clipExtent([[0, 0], [width, height]]);
+
+                     var canvas = d3.select("#chart").append("canvas")
+                         .attr("width", width)
+                         .attr("height", height)
+                         .style("width", width / ratio + "px")
+                         .style("height", height / ratio + "px")
+                         .on("click", function() {
+                           var mouse = d3.mouse(this);
+                           reset(mouse[0] * ratio, mouse[1] * ratio);
+                         });
+
+                     var context = canvas.node().getContext("2d");
+                     context.fillStyle = "#000";
+                     context.lineWidth = .5 * ratio;
+                     context.strokeStyle = "#fff";
+
+                     var iterations,
+                         format = d3.format(",f"),
+                         fill = d3.scale.linear().domain([0, Math.sqrt(width * height / n)]);
+
+                     d3.timer(redraw);
+
+                     reset(width / 2, height / 2);
+
+                     function redraw() {
+                       var cells = voronoi(vertices),
+                           dx = 0,
+                           dy = 0,
+                           edges = {};
+
+                       for (var i = 0, n = cells.length; i < n; ++i) {
+                         var cell = cells[i];
+                         if (cell == null) continue;
+
+                         var area = d3.geom.polygon(cell).area(),
+                             centroid = cell.centroid(-1 / (6 * area)),
+                             vertex = vertices[i],
+                             δx = centroid[0] - vertex[0],
+                             δy = centroid[1] - vertex[1];
+                         dx += Math.abs(δx);
+                         dy += Math.abs(δy);
+                         vertex[0] += δx, vertex[1] += δy;
+
+                         var p0 = cell[0];
+                         if (!p0) continue;
+                         context.fillStyle = fill(Math.sqrt(area));
+                         context.beginPath();
+                         context.moveTo(p0[0], p0[1]);
+                         for (var j = 1, m = cell.length, k0 = p0[0] + "," + p0[1]; j < m; ++j) {
+                           var p = cell[j];
+                           context.lineTo(p[0], p[1]);
+                           var k = p[0] + "," + p[1];
+                           if (k0 < k) edges[k0 + "," + k] = [p0, p];
+                           else edges[k + "," + k0] = [p, p0];
+                           p0 = p, k0 = k;
+                         }
+                         context.fill();
+                       }
+                       for (var k in edges) {
+                         var e = edges[k], e0 = e[0], e1 = e[1];
+                         context.beginPath();
+                         context.moveTo(e0[0], e0[1]);
+                         context.lineTo(e1[0], e1[1]);
+                         context.stroke();
+                       }
+
+                       d3.select("#iterations").text(format(++iterations));
+
+                       if (dx * dx + dy * dy < 1e-6) return true;
+                     }
+
+                     function reset(x, y) {
+                       var hcl = d3.hcl(Date.now() % 360, 27, 83);
+                       fill.range([hcl, hcl.darker(2)]);
+                       vertices = d3.range(n).map(function(d) {
+                         return [x + Math.random() - .5, y + Math.random() - .5];
+                       });
+                       iterations = 0;
+                     }
+
+                   </script>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+
+          <!-- Notice: each .row is a project -->
+          <div class="row">
+            <div class="col-lg-12 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="assets/floor_plan_generation/floor_plan_generation.png" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4" data-tilt data-tilt-scale="1.05"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                  <div class="image-container">
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/floor_plan_generation/floor_plan_generation.png"
+                    />
+                    <div class="after">Blender</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+
+        </div>
+      </div>
+    </section>
+    <!-- /END Projects Section -->
+
+    <!-- **** Footer Section **** -->
+    <footer class="footer navbar-static-bottom">
+      <div class="container">
+        <a rel="noreferrer" href="#top" class="back-to-top">
+          <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+        </a>
+        <div class="social-links">
+          <a rel="noreferrer" href="https://twitter.com/Sinast_" target="_blank">
+            <i class="fa fa-twitter fa-inverse"></i>
+          </a>
+          <a rel="noreferrer" href="https://www.linkedin.com/in/raban-ohlhoff-a624371b4/" target="_blank">
+            <i class="fa fa-linkedin fa-inverse"></i>
+          </a>
+          <a rel="noreferrer" href="https://github.com/Sinasta" target="_blank">
+            <i class="fa fa-github fa-inverse"></i>
+          </a>
+        </div>
+
+        <hr />
+
+        <p class="footer__text">
+          © 2022 - Portfolio by
+          <a rel="noreferrer" href="misc_projects.html" target="_blank"
+            >Raban Ohlhoff</a
+          >
+        </p>
+
+    <script defer type="module" src="index.js"></script>
+  </body>
+</html>
