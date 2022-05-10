@@ -55,11 +55,45 @@
 
           <!-- Notice: each .row is a project -->
           <div class="row">
-            <div class="col-lg-4 col-sm-12">
+            <div class="col-lg-12 col-sm-12">
               <div class="project-wrapper__text load-hidden">
                 <div>
-                  <p class="mb-4">
-                    Work In Progress <br>
+                  <p class="mb-4" align="justify">
+                    This project seeks to generate a synthetic dataset of architectural bodies using parametric regularization to enable automation
+within a deﬁned variability framework. To achieve this, several
+steps with diﬀerent software libraries and algorithms are necessary, as the results of each step have to be analyzed and veriﬁed
+against diﬀerent properties. First, the focus is on the parametric generation of an apartment ﬂoor plan using Python, Blender’s
+Sverchok, and various algorithms such as Voronoi diagrams, KD
+trees, and genetic algorithms. After generating a manifold spatial
+conﬁguration, it can be analyzed from diﬀerent geometric aspects
+using the Python library Topologic. It is important that these two
+steps are in constant exchange to combine the geometric data with
+the evaluation of the spatial analysis and to store the information
+in a ﬁle format suitable for the data. These formats can range
+from simple two-dimensional ﬁles to database formats or graphical data. With the help of topological analysis, apertures such as
+doors and windows can be integrated into the basic geometry in a
+varied manner within the framework of deﬁned spatial and architectural rules. The ﬁnal step involves reconstructing the data in
+geometric form into a three-dimensional model that is ﬁnally enhanced, improved, stored and displayed in a common open source
+BIM format such as IFC using IFCOpenshell, BlenderBIM, Topologic and Opencascade. <br>
+In addition, there is the claim that the dataset can be easily complemented with physical and environmental analyses, such as the
+application of light and radiation based simulations with Radiance,
+Vi-Suite, Honeybee and OpenStudio or a simulation of the energy behavior of the architectural object with Energy+, Vi-Suite-Energy and the core component of OpenStudio to thus add an
+evaluation layer. The evaluated geometric synthetic data can thus
+be used as training data for a machine learning model and should
+be able to counteract the traditions bias thanks to the synthetic
+data origin, in contrast to the common use of real life data by real
+estate companies or architecture ﬁrms. <br>
+Special attention is paid to the consistent use of python-based libraries to ensure the best possible compatibility of the individual
+software interactions. Furthermore, only open source projects are
+used for didactic, ideological and compatibility reasons. During
+the execution of the individual steps, possible problems, suggestions, solutions, proposals for improvement and last but not least
+ideas for further research of the topic are recorded, which are described in detail in the following report.
+The apartment layouts generated show a high variance and allow
+a high degree of intervention and control in the generation process
+thanks to the parametric rule-based generation method. The advantages in the application in connection with machine learning
+are convincing, but will only be proven in the continuation of this
+work in a direct comparison with models trained on conventional
+data sets.<br>
                     <br>
                     <small><small><strong>TECHNIQUES :</strong> Python | Blender | Sverchok</small></small>
                   </p>
@@ -94,7 +128,7 @@
                   height="720" 
                   marginheight="0" 
                   marginwidth="0" 
-                  src="https://ohlhoff-architecture.github.io/slides/floorplan.html">
+                  src="https://ohlhoff-architecture.github.io/slides/floorplan#/1">
                     Fallback text here for unsupporting browsers, of which there are scant few.
                 </iframe>
               </div>
