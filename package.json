@@ -1,12 +1,12 @@
 {
   "name": "portfolio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": "true",
   "description": "My Architecture Portfolio!",
   "source": "src/index.html",
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "npx parcel build src/index.htm"
   },
   "repository": {
     "type": "git",
