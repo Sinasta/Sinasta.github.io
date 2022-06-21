@@ -25,7 +25,7 @@ jobs:
         
       # Install project
       - name: Install project
-        run: npm audit fix && npm install
+        run: npm install && npm audit fix
 
       # Build project
       - name: Build project
