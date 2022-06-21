@@ -25,7 +25,7 @@ jobs:
         
       # Install project
       - name: Install project
-        run: npm install && npm cache clean –force && npm update
+        run: npm audit fix && npm install
 
       # Build project
       - name: Build project
