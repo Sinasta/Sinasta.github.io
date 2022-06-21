@@ -25,7 +25,7 @@ jobs:
         
       # Install project
       - name: Install project
-        run: npm update -g npm && npm install
+        run: npm install && npm update
 
       # Build project
       - name: Build project
