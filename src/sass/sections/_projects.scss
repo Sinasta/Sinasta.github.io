@@ -51,8 +51,7 @@
     }
 
     &__image {
-      filter: brightness(99%);
-      width: 95%;
+      width: 90%;
       margin: 0 auto;
 
       @include respond(tab-land) {
