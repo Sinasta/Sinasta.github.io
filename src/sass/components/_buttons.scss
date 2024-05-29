@@ -7,6 +7,7 @@
   line-height: 1;
   z-index: 1;
   transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
+  border-radius: 12px;
 
   &::after {
     content: "";
@@ -18,13 +19,14 @@
     bottom: 0;
     z-index: -1;
     transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.3s;
+    border-radius: 12px;
   }
 }
 
 /* Hero Style */
 .cta-btn--hero {
   @include supportColorForIE11();
-  border-width: 2px;
+  border-width: 0px;
   border-style: solid;
   -moz-border-image: -moz-linear-gradient(
     135deg,
@@ -52,7 +54,7 @@
 
   @include respond(phone) {
     background-image: none;
-    border: 2px solid $secondary-color;
+    border: 0px solid $secondary-color;
     -webkit-text-fill-color: #00f7d0;
   }
 
@@ -89,7 +91,7 @@
 /* Resume Style */
 .cta-btn--resume {
   color: $white-color;
-  border: 2px solid $white-color;
+  border: 0px solid $white-color;
 
   &::after {
     background: $white-color;
