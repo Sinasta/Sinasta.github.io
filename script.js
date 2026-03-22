@@ -1,0 +1,343 @@
+const CONFIG = {
+  IMAGE_PATH: 'images/',
+  IMAGE_FORMAT: 'webp',
+
+  PROJECT_DATA: {
+    25: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%" },
+    24: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%" },
+    23: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%" },
+    22: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%" },
+    21: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "85%" },
+    20: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "70%" },
+    19: { title: "Horb am Neckar", titleLink: "https://www.competitionline.com/de/news/ergebnisse/rueckbau-ortsdurchfahrt-und-neugestaltung-innenstadt-horb-am-neckar-562061/prizegroup/1-preis-zuschlag-192412.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/horb-am-neckar", focusY: "50%" },
+    18: { title: "Alice-Salomon-Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "80%" },
+    17: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "70%" },
+    16: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "55%" },
+    15: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "55%" },
+    14: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "70%" },
+    13: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "20%" },
+    12: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "50%" },
+    11: { title: "Altmarkt - Duisburg", titleLink: "https://www.competitionline.com/de/news/ergebnisse/umgestaltung-altmarkt-alt-hamborn-in-duisburg-557619/prizegroup/3-preis-190478.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/alt-hamborn", focusY: "50%" },
+    10: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "80%" },
+    9: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "95%" },
+    8: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%" },
+    7: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%" },
+    6: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%" },
+    5: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "40%" },
+    4: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%" },
+    3: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "80%" },
+    2: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "55%" },
+    1: { title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%" }
+  },
+  
+  DESKTOP_DURATION: 12000,
+  MOBILE_PAN_DURATION: 12000,
+  PRELOAD_COUNT: 2
+};
+
+class ImageViewer {
+  constructor() {
+    this.container = document.getElementById('imageContainer');
+    this.loader = document.getElementById('loader');
+    this.projectInfoEl = document.getElementById('projectInfo');
+    this.uiBar = document.getElementById('uiBar');
+    this.images = [];
+    this.currentIndex = 0;
+    this.slideTimeout = null;
+    this.isInteracting = false;
+    this.modalOverlay = document.getElementById('modalOverlay');
+    this.aboutTrigger = document.getElementById('aboutTrigger');
+    this.modalClose = document.getElementById('modalClose');
+    this.contactForm = document.getElementById('contactForm');
+    this.lastFocusedElement = null;
+    
+    this.init();
+  }
+  
+  init() {
+    const keys = Object.keys(CONFIG.PROJECT_DATA).map(Number).sort((a, b) => b - a);
+    
+    keys.forEach(id => {
+      const data = CONFIG.PROJECT_DATA[id];
+      this.images.push({
+        id: id,
+        src: `${CONFIG.IMAGE_PATH}${id}.${CONFIG.IMAGE_FORMAT}`,
+        title: data.title || "",
+        titleLink: data.titleLink || null,
+        office: data.office || "",
+        officeLink: data.officeLink || null,
+        focusY: data.focusY || null
+      });
+    });
+
+    document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
+
+    this.preloadImages().then(() => {
+      this.createSlides();
+      this.setupInteractionListeners();
+      this.setupModalListeners();
+      this.showSlide(0);
+      this.hideLoader();
+      this.scheduleNextSlide();
+    });
+  }
+  
+  preloadImages() {
+    const promises = [];
+    const toLoad = this.images.slice(0, Math.min(CONFIG.PRELOAD_COUNT + 1, this.images.length));
+    toLoad.forEach(img => {
+      promises.push(new Promise((resolve) => {
+        const image = new Image();
+        image.onload = resolve;
+        image.onerror = resolve; 
+        image.src = img.src;
+      }));
+    });
+    const minLoadTime = new Promise(resolve => setTimeout(resolve, 800));
+    return Promise.all([...promises, minLoadTime]);
+  }
+  
+  createSlides() {
+    this.images.forEach((img, index) => {
+      const slide = document.createElement('div');
+      slide.className = 'image-slide';
+      slide.dataset.index = index;
+      
+      const image = document.createElement('img');
+      image.src = img.src;
+      image.alt = img.title ? `${img.title} – architectural visualization by ${img.office}`.trim() : `Architecture visualization ${img.id}`;
+      image.loading = index < 3 ? 'eager' : 'lazy';
+
+      if (img.focusY) {
+        image.style.objectPosition = `center ${img.focusY}`;
+      }
+      
+      slide.appendChild(image);
+      this.container.appendChild(slide);
+    });
+    
+    this.slides = this.container.querySelectorAll('.image-slide');
+  }
+
+  setupInteractionListeners() {
+    window.addEventListener('wheel', (e) => {
+      if (this.isInteracting || this.modalOverlay.classList.contains('active')) return;
+      if (Math.abs(e.deltaY) > 10) {
+        this.isInteracting = true;
+        if (e.deltaY > 0) this.nextSlide();
+        else this.prevSlide();
+        this.resetSchedule();
+        setTimeout(() => { this.isInteracting = false; }, 300);
+      }
+    }, { passive: true });
+
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (this.isInteracting || this.modalOverlay.classList.contains('active')) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diff = touchStartY - touchEndY;
+      if (Math.abs(diff) > 50) {
+        this.isInteracting = true;
+        if (diff > 0) this.nextSlide();
+        else this.prevSlide();
+        this.resetSchedule();
+        setTimeout(() => { this.isInteracting = false; }, 300);
+      }
+    }, { passive: true });
+  }
+
+  setupModalListeners() {
+    this.aboutTrigger.addEventListener('click', () => {
+      this.openModal();
+    });
+
+    this.modalClose.addEventListener('click', () => {
+      this.closeModal();
+    });
+
+    this.modalOverlay.addEventListener('click', (e) => {
+      if (e.target === this.modalOverlay) {
+        this.closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modalOverlay.classList.contains('active')) {
+        this.closeModal();
+      }
+    });
+
+    this.contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = this.contactForm.querySelector('.submit-btn');
+      const messageEl = document.getElementById('formMessage');
+      
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      messageEl.hidden = true;
+      
+      try {
+        const formData = new FormData(this.contactForm);
+        const response = await fetch(this.contactForm.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (response.ok) {
+          messageEl.textContent = 'Your inquiry has been sent.';
+          messageEl.style.color = 'var(--accent)';
+          this.contactForm.reset();
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.errors?.[0]?.message || 'Submission failed');
+        }
+      } catch (error) {
+        messageEl.textContent = `Error: ${error.message}. Please try again later.`;
+        messageEl.style.color = '#ff6b6b';
+        console.error('Form submission error:', error);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+        messageEl.hidden = false;
+        setTimeout(() => { messageEl.hidden = true; }, 5000);
+      }
+    });
+  }
+
+  openModal() {
+    this.modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    this.lastFocusedElement = document.activeElement;
+    this.modalClose.focus();
+  }
+
+  closeModal() {
+    this.modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+
+    if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+      this.lastFocusedElement.focus();
+    }
+  }
+  
+  showSlide(index) {
+    if (index < 0 || index >= this.images.length) return;
+    
+    this.slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+    
+    this.currentIndex = index;
+    
+    const currentData = this.images[index];
+    this.updateInfoBox(currentData);
+    
+    if (index === 0) {
+      setTimeout(() => { this.uiBar.classList.add('visible'); }, 500);
+    }
+    
+    this.preloadAhead(index);
+  }
+
+  updateInfoBox(data) {
+    const titleEl = document.createElement('span');
+    titleEl.className = 'info-title';
+    if (data.titleLink) {
+      const link = document.createElement('a');
+      link.href = data.titleLink;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = data.title;
+      titleEl.appendChild(link);
+    } else {
+      titleEl.textContent = data.title;
+    }
+
+    let officeEl = null;
+    if (data.office) {
+      officeEl = document.createElement('span');
+      officeEl.className = 'info-office';
+      if (data.officeLink) {
+        const link = document.createElement('a');
+        link.href = data.officeLink;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = data.office;
+        officeEl.appendChild(link);
+      } else {
+        officeEl.textContent = data.office;
+      }
+    }
+
+    this.projectInfoEl.innerHTML = '';
+    this.projectInfoEl.appendChild(titleEl);
+    if (officeEl) this.projectInfoEl.appendChild(officeEl);
+  }
+  
+  preloadAhead(currentIndex) {
+    for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
+      const nextIndex = currentIndex + i;
+      if (nextIndex < this.images.length) {
+        const img = new Image();
+        img.src = this.images[nextIndex].src;
+      }
+    }
+  }
+  
+  scheduleNextSlide() {
+    const isMobile = window.innerWidth <= 768;
+    const delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
+    if (this.slideTimeout) clearTimeout(this.slideTimeout);
+    
+    this.slideTimeout = setTimeout(() => {
+      this.nextSlide();
+      this.scheduleNextSlide();
+    }, delay);
+  }
+
+  resetSchedule() {
+    this.scheduleNextSlide();
+  }
+  
+  nextSlide() {
+    const nextIndex = (this.currentIndex + 1) % this.images.length;
+    this.showSlide(nextIndex);
+  }
+
+  prevSlide() {
+    const prevIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.showSlide(prevIndex);
+  }
+  
+  hideLoader() { 
+    this.loader.classList.add('hidden'); 
+    setTimeout(() => {
+      if (this.loader && this.loader.parentNode) {
+        this.loader.parentNode.removeChild(this.loader);
+      }
+    }, 600);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => { 
+  window.viewer = new ImageViewer(); 
+});
+
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('selectstart', (e) => e.preventDefault());
+document.addEventListener('dragstart', (e) => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && ['s', 'u', 'c', 'p'].includes(e.key.toLowerCase())) {
+    e.preventDefault();
+  }
+});

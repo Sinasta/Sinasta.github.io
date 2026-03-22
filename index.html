@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Landscape Architecture Visualizations | Raban Ohlhoff</title>
+  <meta name="description" content="Professional landscape architecture visualization portfolio featuring photorealistic 3D renders for landscape architecture, urban planning, and building projects in Germany and beyond.">
+  <meta name="keywords" content="architecture visualization, 3d rendering, architectural photography, landscape architecture, berlin, landschaftsarchitektur, darstellungen, design">
+  <meta name="author" content="Raban Ohlhoff">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://raban-ohlhoff.com/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://raban-ohlhoff.com/">
+  <meta property="og:title" content="Landscape Architecture Visualizations | Raban Ohlhoff">
+  <meta property="og:description" content="Professional landscape architecture visualization portfolio featuring photorealistic 3D renders.">
+  <meta property="og:image" content="https://raban-ohlhoff.com/images/cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://raban-ohlhoff.com/">
+  <meta name="twitter:title" content="Architecture Visualizations | Raban Ohlhoff">
+  <meta name="twitter:description" content="Professional landscape architecture visualization portfolio featuring photorealistic 3D renders.">
+  <meta name="twitter:image" content="https://raban-ohlhoff.com/images/cover.jpg">
+
+  <!-- Preconnect to font domains (fixed URLs) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Async CSS loading for performance -->
+  <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="styles.css"></noscript>
+
+  <!-- Structured Data (JSON-LD) - fixed URLs and info -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Raban Ohlhoff",
+    "jobTitle": "Freelance Architectural Visualizer",
+    "url": "https://raban-ohlhoff.com",
+    "image": "https://raban-ohlhoff.com/images/profile.jpg",
+    "sameAs": [
+      "https://linkedin.com/in/rabanohlhoff",
+      "https://instagram.com/rabanohlhoff"
+    ],
+    "areaServed": "Berlin, Germany",
+    "description": "Freelance architectural visualizer creating photorealistic 3D renders for landscape architecture, urban planning, and building projects.",
+    "knowsAbout": [
+      "Architectural Visualization",
+      "3D Rendering",
+      "Landscape Architecture",
+      "Vectorworks",
+      "Enscape",
+      "Blender",
+      "Photoshop",
+      "Real-time Rendering"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <h1 class="visually-hidden">Landscape Architecture Visualizations | Raban Ohlhoff</h1>
+
+  <div class="loader" id="loader" role="status" aria-live="polite" aria-label="Loading portfolio">
+    <div class="loader-content">
+      <div class="loader-bar"></div>
+      <span class="visually-hidden">Loading images...</span>
+    </div>
+  </div>
+
+  <div class="image-container" id="imageContainer"></div>
+
+  <div class="ui-bar" id="uiBar">
+    <div class="project-info" id="projectInfo"></div>
+    
+    <button class="about-trigger" id="aboutTrigger" aria-label="Open About and Contact">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24  24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-body">
+        <h2 class="modal-title">About</h2>
+        <p class="modal-text">
+          I am Raban Ohlhoff, an architectural visualizer based in Berlin. I create photorealistic 3D renders for landscape architecture, urban planning, and building projects, combining technical precision with artistic vision.
+        </p>
+
+        <div class="divider"></div>
+
+        <h2 class="modal-title">Contact</h2>
+        <form 
+          id="contactForm" 
+          class="contact-form"
+          action="https://formspree.io/f/mojkzgry" 
+          method="POST"
+        >
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="_subject" value="New Project Inquiry from raban-ohlhoff.com">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="perspectives">Amount of Perspectives</label>
+              <input type="number" id="perspectives" name="perspectives" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="date">Date of Submission</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="office">Office</label>
+            <input type="text" id="office" name="office" placeholder="Your office name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Tell me about your project..." required></textarea>
+          </div>
+          
+          <button type="submit" class="submit-btn">Send Inquiry</button>
+
+          <div id="formMessage" class="form-message" hidden></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
