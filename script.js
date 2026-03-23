@@ -3,31 +3,31 @@ const CONFIG = {
   IMAGE_FORMAT: 'webp',
 
   PROJECT_DATA: {
-    25: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%" },
-    24: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%" },
-    23: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%" },
-    22: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%" },
-    21: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "85%" },
-    20: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "70%" },
-    19: { title: "Horb am Neckar", titleLink: "https://www.competitionline.com/de/news/ergebnisse/rueckbau-ortsdurchfahrt-und-neugestaltung-innenstadt-horb-am-neckar-562061/prizegroup/1-preis-zuschlag-192412.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/horb-am-neckar", focusY: "50%" },
-    18: { title: "Alice-Salomon-Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "80%" },
-    17: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "70%" },
-    16: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "55%" },
-    15: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "55%" },
-    14: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "70%" },
-    13: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "20%" },
-    12: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "50%" },
-    11: { title: "Altmarkt - Duisburg", titleLink: "https://www.competitionline.com/de/news/ergebnisse/umgestaltung-altmarkt-alt-hamborn-in-duisburg-557619/prizegroup/3-preis-190478.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/alt-hamborn", focusY: "50%" },
-    10: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "80%" },
-    9: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "95%" },
-    8: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%" },
-    7: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%" },
-    6: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%" },
-    5: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "40%" },
-    4: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%" },
-    3: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "80%" },
-    2: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "55%" },
-    1: { title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%" }
+    25: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
+    24: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
+    23: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
+    22: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
+    21: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "85%", prize: 1 },
+    20: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "70%", prize: 1 },
+    19: { title: "Horb am Neckar", titleLink: "https://www.competitionline.com/de/news/ergebnisse/rueckbau-ortsdurchfahrt-und-neugestaltung-innenstadt-horb-am-neckar-562061/prizegroup/1-preis-zuschlag-192412.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/horb-am-neckar", focusY: "50%", prize: 1 },
+    18: { title: "Alice-Salomon-Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "80%", prize: null },
+    17: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "70%", prize: 2 },
+    16: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "55%", prize: 2 },
+    15: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "55%", prize: "recognition" },
+    14: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "70%", prize: "recognition" },
+    13: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "20%", prize: null },
+    12: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "50%", prize: null },
+    11: { title: "Altmarkt - Duisburg", titleLink: "https://www.competitionline.com/de/news/ergebnisse/umgestaltung-altmarkt-alt-hamborn-in-duisburg-557619/prizegroup/3-preis-190478.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/alt-hamborn", focusY: "50%", prize: 3 },
+    10: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "80%", prize: "recognition" },
+    9: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "95%", prize: "recognition" },
+    8: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%", prize: 3 },
+    7: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%", prize: 3 },
+    6: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%", prize: 2 },
+    5: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "40%", prize: 2 },
+    4: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%", prize: 2 },
+    3: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "80%", prize: null },
+    2: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "55%", prize: null },
+    1: { title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%", prize: 3 }
   },
   
   DESKTOP_DURATION: 12000,
@@ -66,7 +66,8 @@ class ImageViewer {
         titleLink: data.titleLink || null,
         office: data.office || "",
         officeLink: data.officeLink || null,
-        focusY: data.focusY || null
+        focusY: data.focusY || null,
+        prize: data.prize || null
       });
     });
 
@@ -76,6 +77,7 @@ class ImageViewer {
       this.createSlides();
       this.setupInteractionListeners();
       this.setupModalListeners();
+      this.setupScrollIndicator();
       this.showSlide(0);
       this.hideLoader();
       this.scheduleNextSlide();
@@ -89,7 +91,7 @@ class ImageViewer {
       promises.push(new Promise((resolve) => {
         const image = new Image();
         image.onload = resolve;
-        image.onerror = resolve; 
+        image.onerror = resolve;
         image.src = img.src;
       }));
     });
@@ -134,6 +136,7 @@ class ImageViewer {
     let touchStartY = 0;
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
+      this.pausePanAnimation();
     }, { passive: true });
 
     window.addEventListener('touchend', (e) => {
@@ -147,7 +150,22 @@ class ImageViewer {
         this.resetSchedule();
         setTimeout(() => { this.isInteracting = false; }, 300);
       }
+      this.resumePanAnimation();
     }, { passive: true });
+
+    window.addEventListener('touchcancel', () => {
+      this.resumePanAnimation();
+    }, { passive: true });
+  }
+
+  pausePanAnimation() {
+    const activeImg = this.container.querySelector('.image-slide.active img');
+    if (activeImg) activeImg.classList.add('pan-paused');
+  }
+
+  resumePanAnimation() {
+    const activeImg = this.container.querySelector('.image-slide.active img');
+    if (activeImg) activeImg.classList.remove('pan-paused');
   }
 
   setupModalListeners() {
@@ -174,12 +192,11 @@ class ImageViewer {
     this.contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const submitBtn = this.contactForm.querySelector('.submit-btn');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
       const messageEl = document.getElementById('formMessage');
-      
-      const originalBtnText = submitBtn.textContent;
+
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
       messageEl.hidden = true;
       
       try {
@@ -191,32 +208,39 @@ class ImageViewer {
         });
         
         if (response.ok) {
-          messageEl.textContent = 'Your inquiry has been sent.';
+          messageEl.textContent = '✓ Message sent! I\'ll get back to you soon.';
           messageEl.style.color = 'var(--accent)';
           this.contactForm.reset();
         } else {
-          const errorData = await response.json();
+          const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.errors?.[0]?.message || 'Submission failed');
         }
       } catch (error) {
-        messageEl.textContent = `Error: ${error.message}. Please try again later.`;
+        messageEl.textContent = `✗ ${error.message}. Please try again or email directly.`;
         messageEl.style.color = '#ff6b6b';
         console.error('Form submission error:', error);
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        messageEl.hidden = false;
-        setTimeout(() => { messageEl.hidden = true; }, 5000);
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          messageEl.hidden = false;
+
+          if (messageEl.textContent.includes('✓')) {
+            setTimeout(() => { messageEl.hidden = true; }, 5000);
+          }
+        }, 800);
       }
     });
   }
 
   openModal() {
     this.modalOverlay.classList.add('active');
+    this.modalOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
-
     this.lastFocusedElement = document.activeElement;
-    this.modalClose.focus();
+    
+    requestAnimationFrame(() => {
+      this.modalClose.focus();
+    });
   }
 
   closeModal() {
@@ -230,6 +254,15 @@ class ImageViewer {
   
   showSlide(index) {
     if (index < 0 || index >= this.images.length) return;
+
+    this.slides.forEach(slide => {
+      const img = slide.querySelector('img');
+      if (img) {
+        img.style.animation = 'none';
+        void img.offsetHeight;
+        img.style.animation = '';
+      }
+    });
     
     this.slides.forEach((slide, i) => {
       slide.classList.toggle('active', i === index);
@@ -248,6 +281,8 @@ class ImageViewer {
   }
 
   updateInfoBox(data) {
+    this.projectInfoEl.innerHTML = '';
+    
     const titleEl = document.createElement('span');
     titleEl.className = 'info-title';
     if (data.titleLink) {
@@ -260,26 +295,40 @@ class ImageViewer {
     } else {
       titleEl.textContent = data.title;
     }
-
-    let officeEl = null;
-    if (data.office) {
-      officeEl = document.createElement('span');
-      officeEl.className = 'info-office';
-      if (data.officeLink) {
-        const link = document.createElement('a');
-        link.href = data.officeLink;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = data.office;
-        officeEl.appendChild(link);
-      } else {
-        officeEl.textContent = data.office;
-      }
-    }
-
-    this.projectInfoEl.innerHTML = '';
     this.projectInfoEl.appendChild(titleEl);
-    if (officeEl) this.projectInfoEl.appendChild(officeEl);
+
+    if (data.office || data.prize) {
+      const metaEl = document.createElement('span');
+      metaEl.className = 'info-office';
+      
+      if (data.prize) {
+        const prizeEl = document.createElement('span');
+        prizeEl.className = 'info-prize';
+        if (data.prize === 'recognition') {
+          prizeEl.textContent = 'Recognition';
+        } else {
+          prizeEl.textContent = `${data.prize}. Prize`;
+        }
+        metaEl.appendChild(prizeEl);
+      }
+      
+      if (data.office) {
+        if (data.officeLink) {
+          const link = document.createElement('a');
+          link.href = data.officeLink;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = data.office;
+          metaEl.appendChild(link);
+        } else {
+          const text = document.createElement('span');
+          text.textContent = data.office;
+          metaEl.appendChild(text);
+        }
+      }
+      
+      this.projectInfoEl.appendChild(metaEl);
+    }
   }
   
   preloadAhead(currentIndex) {
@@ -324,6 +373,24 @@ class ImageViewer {
         this.loader.parentNode.removeChild(this.loader);
       }
     }, 600);
+  }
+
+  setupScrollIndicator() {
+    const indicator = document.getElementById('scrollIndicator');
+    if (!indicator) return;
+    
+    const hideIndicator = () => {
+      indicator.classList.add('hidden');
+      window.removeEventListener('wheel', hideIndicator);
+      window.removeEventListener('touchstart', hideIndicator);
+      window.removeEventListener('keydown', hideIndicator);
+    };
+    
+    window.addEventListener('wheel', hideIndicator, { passive: true });
+    window.addEventListener('touchstart', hideIndicator, { passive: true });
+    window.addEventListener('keydown', hideIndicator);
+    
+    setTimeout(hideIndicator, 30000);
   }
 }
 
