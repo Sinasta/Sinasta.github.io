@@ -32,6 +32,16 @@
   <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="styles.css"></noscript>
 
+  <!-- Import map for Three.js and Spark -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.178.0/three.module.js",
+      "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.9/spark.module.js"
+    }
+  }
+  </script>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -73,6 +83,9 @@
   </div>
 
   <div class="image-container" id="imageContainer"></div>
+  
+  <!-- New container for 3D Splat Viewer -->
+  <div id="splatContainer" class="splat-container" hidden></div>
 
   <div class="ui-bar" id="uiBar">
     <div class="project-info" id="projectInfo"></div>
@@ -148,6 +161,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

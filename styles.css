@@ -54,8 +54,23 @@ a,
 }
 
 .modal-overlay[hidden],
-.modal-overlay:not(.active) {
+.modal-overlay:not(.active),
+.splat-container[hidden] {
   display: none !important;
+}
+
+/* Splat Container Styles */
+.splat-container {
+  position: fixed;
+  inset: 0;
+  z-index: 5; /* Above image container (z-index 1), below UI (z-index 100) */
+  background: #000; /* Match splat viewer background */
+}
+
+.splat-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .loader {
@@ -103,6 +118,7 @@ a,
   position: fixed;
   inset: 0;
   background: var(--bg);
+  z-index: 1;
 }
 
 .image-slide {
@@ -389,6 +405,11 @@ a,
     right: 16px;
   }
 
+  /* Hide 3D toggle on mobile as per requirement */
+  .toggle-3d {
+    display: none;
+  }
+
   .ui-actions {
     flex-direction: column-reverse; /* Stacks items vertically: About (top), Toggle (bottom) */
     align-items: center;
@@ -396,7 +417,6 @@ a,
   }
 
   /* Reset transform for mobile to avoid issues with reverse column */
-  .ui-bar.visible .toggle-3d,
   .ui-bar.visible .about-trigger {
     transform: translateY(0);
   }

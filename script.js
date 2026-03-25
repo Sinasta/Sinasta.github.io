@@ -1,6 +1,7 @@
 const CONFIG = {
   IMAGE_PATH: 'images/',
   IMAGE_FORMAT: 'webp',
+  SPLAT_PATH: './splats/',
 
   PROJECT_DATA: {
     25: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
@@ -38,6 +39,7 @@ const CONFIG = {
 class ImageViewer {
   constructor() {
     this.container = document.getElementById('imageContainer');
+    this.splatContainer = document.getElementById('splatContainer');
     this.loader = document.getElementById('loader');
     this.projectInfoEl = document.getElementById('projectInfo');
     this.uiBar = document.getElementById('uiBar');
@@ -53,11 +55,15 @@ class ImageViewer {
     this.toastContainer = document.getElementById('toastContainer');
     this.toggle3D = document.getElementById('toggle3D');
     this.lastFocusedElement = null;
+
+    // 3D State
+    this.is3DMode = false;
+    this.splatViewer = null; // Will hold the SplatViewer instance
     
     this.init();
   }
   
-  init() {
+  async init() {
     const keys = Object.keys(CONFIG.PROJECT_DATA).map(Number).sort((a, b) => b - a);
     
     keys.forEach(id => {
@@ -76,16 +82,15 @@ class ImageViewer {
 
     document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
 
-    this.preloadImages().then(() => {
-      this.createSlides();
-      this.setupInteractionListeners();
-      this.setupModalListeners();
-      this.setupToggle3D();
-      this.setupScrollIndicator();
-      this.showSlide(0);
-      this.hideLoader();
-      this.scheduleNextSlide();
-    });
+    await this.preloadImages();
+    this.createSlides();
+    this.setupInteractionListeners();
+    this.setupModalListeners();
+    this.setupToggle3D();
+    this.setupScrollIndicator();
+    this.showSlide(0);
+    this.hideLoader();
+    this.scheduleNextSlide();
   }
   
   preloadImages() {
@@ -141,8 +146,6 @@ class ImageViewer {
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
       this.pausePanAnimation();
-      
-      // Pause slideshow timer while holding
       this.isHolding = true;
       if (this.slideTimeout) clearTimeout(this.slideTimeout);
     }, { passive: true });
@@ -160,7 +163,6 @@ class ImageViewer {
         this.resetSchedule();
         setTimeout(() => { this.isInteracting = false; }, 300);
       } else {
-        // If it wasn't a swipe, restart the timer now that touch ended
         this.scheduleNextSlide();
       }
       
@@ -170,20 +172,32 @@ class ImageViewer {
 
     window.addEventListener('touchcancel', () => {
       this.resumePanAnimation();
-      // Ensure timer restarts if touch is cancelled
       if (this.isHolding) {
         this.isHolding = false;
         this.scheduleNextSlide();
       }
     }, { passive: true });
+
+    // Global click listener for 3D mode
+    window.addEventListener('click', (e) => {
+      if (!this.is3DMode) return;
+      // Ignore clicks on UI
+      if (e.target.closest('.ui-bar') || e.target.closest('.modal-overlay')) return;
+      
+      // Click to switch slide in 3D mode
+      this.nextSlide();
+      this.resetSchedule();
+    });
   }
 
   pausePanAnimation() {
+    if (this.is3DMode) return;
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.add('pan-paused');
   }
 
   resumePanAnimation() {
+    if (this.is3DMode) return;
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.remove('pan-paused');
   }
@@ -191,10 +205,42 @@ class ImageViewer {
   setupToggle3D() {
     if (!this.toggle3D) return;
     
-    this.toggle3D.addEventListener('click', () => {
+    // Hide on mobile via JS as backup to CSS
+    if (window.innerWidth < 769) {
+        this.toggle3D.style.display = 'none';
+    }
+
+    this.toggle3D.addEventListener('click', async () => {
+      if (window.innerWidth < 769) return; // Safety check
+
       const isActive = this.toggle3D.classList.toggle('active');
       this.toggle3D.setAttribute('aria-pressed', isActive);
-      // Logic for 3D mode will go here later
+      this.is3DMode = isActive;
+
+      if (isActive) {
+        // Switch to 3D
+        this.container.style.opacity = '0';
+        this.splatContainer.hidden = false;
+        
+        if (!this.splatViewer) {
+          // Dynamically import the viewer logic
+          const { SplatViewer } = await import('./splat-viewer.js');
+          this.splatViewer = new SplatViewer(this.splatContainer);
+          await this.splatViewer.init();
+        }
+        
+        // Update viewer to current slide
+        const currentImg = this.images[this.currentIndex];
+        this.splatViewer.loadSplat(currentImg.id);
+        
+        // Stop 2D slideshow timer
+        if (this.slideTimeout) clearTimeout(this.slideTimeout);
+      } else {
+        // Switch to 2D
+        this.container.style.opacity = '1';
+        this.splatContainer.hidden = true;
+        this.scheduleNextSlide();
+      }
     });
   }
 
@@ -294,18 +340,26 @@ class ImageViewer {
   showSlide(index) {
     if (index < 0 || index >= this.images.length) return;
 
-    this.slides.forEach(slide => {
-      const img = slide.querySelector('img');
-      if (img) {
-        img.style.animation = 'none';
-        void img.offsetHeight;
-        img.style.animation = '';
-      }
-    });
-    
-    this.slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
+    // If in 3D mode, update the splat view instead of the image slide
+    if (this.is3DMode && this.splatViewer) {
+      const currentImg = this.images[index];
+      this.splatViewer.loadSplat(currentImg.id);
+      // We don't return; we still update the info box below
+    } else {
+      // Standard 2D logic
+      this.slides.forEach(slide => {
+        const img = slide.querySelector('img');
+        if (img) {
+          img.style.animation = 'none';
+          void img.offsetHeight;
+          img.style.animation = '';
+        }
+      });
+      
+      this.slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    }
     
     this.currentIndex = index;
     
@@ -371,6 +425,8 @@ class ImageViewer {
   }
   
   preloadAhead(currentIndex) {
+    if (this.is3DMode) return; // No need to preload images in 3D mode
+    
     for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
       const nextIndex = currentIndex + i;
       if (nextIndex < this.images.length) {
@@ -381,6 +437,8 @@ class ImageViewer {
   }
   
   scheduleNextSlide() {
+    if (this.is3DMode) return; // No auto-slide in 3D mode (user clicks)
+
     const isMobile = window.innerWidth <= 768;
     const delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
     if (this.slideTimeout) clearTimeout(this.slideTimeout);
@@ -433,10 +491,12 @@ class ImageViewer {
   }
 }
 
+// Initialize
 document.addEventListener('DOMContentLoaded', () => { 
   window.viewer = new ImageViewer(); 
 });
 
+// Security / Protection scripts
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('selectstart', (e) => e.preventDefault());
 document.addEventListener('dragstart', (e) => {
