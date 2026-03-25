@@ -141,7 +141,6 @@ a,
     animation-play-state: running;
   }
 
-  /* Pause on touch hold */
   .image-slide img.pan-paused {
     animation-play-state: paused !important;
   }
@@ -467,25 +466,6 @@ input::placeholder, textarea::placeholder {
   color: rgba(255, 255, 255, 0.3);
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="email"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  opacity: 0.6;
-  cursor: pointer;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 textarea {
   resize: vertical;
   min-height: 100px;
@@ -567,33 +547,40 @@ textarea {
 }
 
 .toast {
-  background: var(--bg-light);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Match .project-info styling */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  /* Match layout/aesthetics */
   border-radius: 4px;
-  padding: 12px 20px;
+  padding: 12px 18px;
+  
+  /* Remove old contrasting styles */
+  border: none;
+  box-shadow: none;
+
+  /* Content styling */
   font-size: 14px;
   color: var(--fg);
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
+  max-width: 400px;
+  width: fit-content;
   
   opacity: 0;
   transform: translateY(-20px);
   animation: toastSlideIn 0.3s ease forwards, toastFadeOut 0.3s ease 4.7s forwards;
-  pointer-events: auto;
-  max-width: 400px;
-  width: fit-content;
 }
 
 .toast.success {
-  border-left: 3px solid var(--accent);
+  /* No border-left, keep clean like the panel */
 }
 
 .toast.error {
-  border-left: 3px solid #ff6b6b;
+  /* No border-left */
 }
 
 .toast-icon {

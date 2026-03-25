@@ -49,6 +49,7 @@ class ImageViewer {
     this.aboutTrigger = document.getElementById('aboutTrigger');
     this.modalClose = document.getElementById('modalClose');
     this.contactForm = document.getElementById('contactForm');
+    this.toastContainer = document.getElementById('toastContainer');
     this.lastFocusedElement = null;
     
     this.init();
@@ -193,11 +194,7 @@ class ImageViewer {
       e.preventDefault();
       
       const submitBtn = document.getElementById('submitBtn');
-      const btnLoading = submitBtn.querySelector('.btn-loading');
-      const messageEl = document.getElementById('formMessage');
-
       submitBtn.disabled = true;
-      messageEl.hidden = true;
       
       try {
         const formData = new FormData(this.contactForm);
@@ -208,28 +205,42 @@ class ImageViewer {
         });
         
         if (response.ok) {
-          messageEl.textContent = '✓ Message sent! I\'ll get back to you soon.';
-          messageEl.style.color = 'var(--accent)';
+          this.showToast('success', 'Message sent!');
           this.contactForm.reset();
+          this.closeModal();
         } else {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.errors?.[0]?.message || 'Submission failed');
         }
       } catch (error) {
-        messageEl.textContent = `✗ ${error.message}. Please try again or email directly.`;
-        messageEl.style.color = '#ff6b6b';
+        this.showToast('error', `Failed to send. Please try again.`);
         console.error('Form submission error:', error);
       } finally {
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          messageEl.hidden = false;
-
-          if (messageEl.textContent.includes('✓')) {
-            setTimeout(() => { messageEl.hidden = true; }, 5000);
-          }
-        }, 800);
+        submitBtn.disabled = false;
       }
     });
+  }
+
+  showToast(type, message) {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let iconSvg = '';
+    if (type === 'success') {
+      iconSvg = '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    } else {
+      iconSvg = '<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    }
+    
+    toast.innerHTML = `${iconSvg}<span>${message}</span>`;
+    this.toastContainer.appendChild(toast);
+
+    // Remove the toast after animation completes (5s)
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 5000);
   }
 
   openModal() {
