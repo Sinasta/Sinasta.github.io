@@ -45,6 +45,7 @@ class ImageViewer {
     this.currentIndex = 0;
     this.slideTimeout = null;
     this.isInteracting = false;
+    this.isHolding = false;
     this.modalOverlay = document.getElementById('modalOverlay');
     this.aboutTrigger = document.getElementById('aboutTrigger');
     this.modalClose = document.getElementById('modalClose');
@@ -140,24 +141,40 @@ class ImageViewer {
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
       this.pausePanAnimation();
+      
+      // Pause slideshow timer while holding
+      this.isHolding = true;
+      if (this.slideTimeout) clearTimeout(this.slideTimeout);
     }, { passive: true });
 
     window.addEventListener('touchend', (e) => {
       if (this.isInteracting || this.modalOverlay.classList.contains('active')) return;
+      
       const touchEndY = e.changedTouches[0].clientY;
       const diff = touchStartY - touchEndY;
+      
       if (Math.abs(diff) > 50) {
         this.isInteracting = true;
         if (diff > 0) this.nextSlide();
         else this.prevSlide();
         this.resetSchedule();
         setTimeout(() => { this.isInteracting = false; }, 300);
+      } else {
+        // If it wasn't a swipe, restart the timer now that touch ended
+        this.scheduleNextSlide();
       }
+      
       this.resumePanAnimation();
+      this.isHolding = false;
     }, { passive: true });
 
     window.addEventListener('touchcancel', () => {
       this.resumePanAnimation();
+      // Ensure timer restarts if touch is cancelled
+      if (this.isHolding) {
+        this.isHolding = false;
+        this.scheduleNextSlide();
+      }
     }, { passive: true });
   }
 
