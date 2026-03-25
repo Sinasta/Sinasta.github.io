@@ -55,10 +55,8 @@ class ImageViewer {
     this.toastContainer = document.getElementById('toastContainer');
     this.toggle3D = document.getElementById('toggle3D');
     this.lastFocusedElement = null;
-
-    // 3D State
     this.is3DMode = false;
-    this.splatViewer = null; // Will hold the SplatViewer instance
+    this.splatViewer = null;
     
     this.init();
   }
@@ -177,17 +175,6 @@ class ImageViewer {
         this.scheduleNextSlide();
       }
     }, { passive: true });
-
-    // Global click listener for 3D mode
-    window.addEventListener('click', (e) => {
-      if (!this.is3DMode) return;
-      // Ignore clicks on UI
-      if (e.target.closest('.ui-bar') || e.target.closest('.modal-overlay')) return;
-      
-      // Click to switch slide in 3D mode
-      this.nextSlide();
-      this.resetSchedule();
-    });
   }
 
   pausePanAnimation() {
@@ -205,40 +192,42 @@ class ImageViewer {
   setupToggle3D() {
     if (!this.toggle3D) return;
     
-    // Hide on mobile via JS as backup to CSS
     if (window.innerWidth < 769) {
         this.toggle3D.style.display = 'none';
     }
 
     this.toggle3D.addEventListener('click', async () => {
-      if (window.innerWidth < 769) return; // Safety check
+      if (window.innerWidth < 769) return;
 
       const isActive = this.toggle3D.classList.toggle('active');
       this.toggle3D.setAttribute('aria-pressed', isActive);
       this.is3DMode = isActive;
 
       if (isActive) {
-        // Switch to 3D
         this.container.style.opacity = '0';
         this.splatContainer.hidden = false;
         
         if (!this.splatViewer) {
-          // Dynamically import the viewer logic
-          const { SplatViewer } = await import('./splat-viewer.js');
+          const { SplatViewer } = await import('./splat.js');
           this.splatViewer = new SplatViewer(this.splatContainer);
           await this.splatViewer.init();
         }
         
-        // Update viewer to current slide
         const currentImg = this.images[this.currentIndex];
         this.splatViewer.loadSplat(currentImg.id);
         
-        // Stop 2D slideshow timer
         if (this.slideTimeout) clearTimeout(this.slideTimeout);
       } else {
-        // Switch to 2D
-        this.container.style.opacity = '1';
         this.splatContainer.hidden = true;
+        this.container.style.opacity = '1';
+
+        this.showSlide(this.currentIndex);
+        
+        if (this.splatViewer) {
+          this.splatViewer.dispose();
+          this.splatViewer = null;
+        }
+        
         this.scheduleNextSlide();
       }
     });
@@ -340,13 +329,10 @@ class ImageViewer {
   showSlide(index) {
     if (index < 0 || index >= this.images.length) return;
 
-    // If in 3D mode, update the splat view instead of the image slide
     if (this.is3DMode && this.splatViewer) {
       const currentImg = this.images[index];
       this.splatViewer.loadSplat(currentImg.id);
-      // We don't return; we still update the info box below
     } else {
-      // Standard 2D logic
       this.slides.forEach(slide => {
         const img = slide.querySelector('img');
         if (img) {
@@ -425,7 +411,7 @@ class ImageViewer {
   }
   
   preloadAhead(currentIndex) {
-    if (this.is3DMode) return; // No need to preload images in 3D mode
+    if (this.is3DMode) return;
     
     for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
       const nextIndex = currentIndex + i;
@@ -437,7 +423,7 @@ class ImageViewer {
   }
   
   scheduleNextSlide() {
-    if (this.is3DMode) return; // No auto-slide in 3D mode (user clicks)
+    if (this.is3DMode) return;
 
     const isMobile = window.innerWidth <= 768;
     const delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
@@ -491,12 +477,10 @@ class ImageViewer {
   }
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => { 
   window.viewer = new ImageViewer(); 
 });
 
-// Security / Protection scripts
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('selectstart', (e) => e.preventDefault());
 document.addEventListener('dragstart', (e) => {

@@ -10,6 +10,9 @@ export class SplatViewer {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+        this.boundMouseMove = null;
+        this.boundResize = null;
+        this.isDisposed = false;
     }
 
     async init() {
@@ -18,11 +21,16 @@ export class SplatViewer {
         camera.position.set(0, 0, 0);
         camera.lookAt(0, 0, 1);
 
-        const renderer = new THREE.WebGLRenderer({ powerPreference: 'high-performance', antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        const renderer = new THREE.WebGLRenderer({ 
+            powerPreference: 'high-performance', 
+            antialias: false,
+            alpha: false
+        });
         
-        // Clear container just in case
+        const pixelRatio = Math.min(window.devicePixelRatio, 2);
+        renderer.setPixelRatio(pixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
         this.container.innerHTML = '';
         this.container.appendChild(renderer.domElement);
 
@@ -30,44 +38,42 @@ export class SplatViewer {
         this.camera = camera;
         this.renderer = renderer;
 
-        // Mouse Listeners
-        window.addEventListener('mousemove', (e) => {
+        this.boundMouseMove = (e) => {
             const hw = window.innerWidth / 2;
             const hh = window.innerHeight / 2;
             this.mouseX = (e.clientX - hw) / hw;
             this.mouseY = (e.clientY - hh) / hh;
-        });
+        };
 
-        // Resize Listener
-        window.addEventListener('resize', () => {
-            if (window.innerWidth < 768) {
-                // If resized to mobile, cleanup is handled by main script logic ideally,
-                // but we stop the loop here to save resources.
-                if(this.renderer) this.renderer.setAnimationLoop(null); 
-                return;
-            }
+        this.boundResize = () => {
+            if (window.innerWidth < 768) return;
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
+            
+            const pr = Math.min(window.devicePixelRatio, 2);
+            this.renderer.setPixelRatio(pr);
             this.renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        };
 
-        // Start Loop
+        window.addEventListener('mousemove', this.boundMouseMove);
+        window.addEventListener('resize', this.boundResize);
+
         this.renderer.setAnimationLoop(this.animate.bind(this));
     }
 
     loadSplat(id) {
-        if (!this.scene) return;
+        if (!this.scene || this.isDisposed) return;
 
         if (this.currentSplatMesh) { 
             this.scene.remove(this.currentSplatMesh); 
             if (this.currentSplatMesh.dispose) this.currentSplatMesh.dispose(); 
         }
         
-        // Construct path based on ID
         const url = `./splats/${id}.ply`;
 
         const splatMesh = new SplatMesh({ 
-            url: url, 
+            url: url,
+            maxStdDev: Math.sqrt(5),
             onLoad: () => { 
                 splatMesh.rotation.y = Math.PI;
             }
@@ -81,7 +87,7 @@ export class SplatViewer {
     }
 
     animate() {
-        if (!this.camera) return;
+        if (!this.camera || this.isDisposed) return;
         
         const baseZ = this.camera.position.z;
         this.camera.position.x += (this.mouseX * 0.5 - this.camera.position.x) * 0.05;
@@ -89,5 +95,42 @@ export class SplatViewer {
         this.camera.position.z = baseZ;
         
         this.renderer.render(this.scene, this.camera);
+    }
+
+    dispose() {
+        this.isDisposed = true;
+        
+        if (this.renderer) {
+            this.renderer.setAnimationLoop(null);
+        }
+
+        if (this.boundMouseMove) {
+            window.removeEventListener('mousemove', this.boundMouseMove);
+        }
+        if (this.boundResize) {
+            window.removeEventListener('resize', this.boundResize);
+        }
+
+        if (this.currentSplatMesh) {
+            if (this.currentSplatMesh.dispose) {
+                this.currentSplatMesh.dispose();
+            }
+            if (this.scene) {
+                this.scene.remove(this.currentSplatMesh);
+            }
+            this.currentSplatMesh = null;
+        }
+
+        if (this.renderer) {
+            this.renderer.dispose();
+            if (this.renderer.domElement && this.renderer.domElement.parentNode) {
+                this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
+            }
+            this.renderer = null;
+        }
+
+        this.scene = null;
+        this.camera = null;
+        this.container.innerHTML = '';
     }
 }
