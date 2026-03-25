@@ -59,12 +59,11 @@ a,
   display: none !important;
 }
 
-/* Splat Container Styles */
 .splat-container {
   position: fixed;
   inset: 0;
-  z-index: 5; /* Above image container (z-index 1), below UI (z-index 100) */
-  background: #000; /* Match splat viewer background */
+  z-index: 5;
+  background: #000;
 }
 
 .splat-container canvas {
@@ -299,7 +298,6 @@ a,
   pointer-events: auto;
 }
 
-/* 3D Toggle Switch */
 .toggle-3d {
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
@@ -350,7 +348,6 @@ a,
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* Active State */
 .toggle-3d.active .toggle-label {
   color: var(--accent);
 }
@@ -397,7 +394,6 @@ a,
   outline-offset: 2px;
 }
 
-/* Mobile Layout for UI Actions */
 @media (max-width: 768px) {
   .ui-bar {
     bottom: 16px;
@@ -405,18 +401,16 @@ a,
     right: 16px;
   }
 
-  /* Hide 3D toggle on mobile as per requirement */
   .toggle-3d {
     display: none;
   }
 
   .ui-actions {
-    flex-direction: column-reverse; /* Stacks items vertically: About (top), Toggle (bottom) */
+    flex-direction: column-reverse;
     align-items: center;
     gap: 10px;
   }
 
-  /* Reset transform for mobile to avoid issues with reverse column */
   .ui-bar.visible .about-trigger {
     transform: translateY(0);
   }
@@ -639,7 +633,6 @@ textarea {
   display: none;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 24px;
