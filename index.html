@@ -77,12 +77,19 @@
   <div class="ui-bar" id="uiBar">
     <div class="project-info" id="projectInfo"></div>
     
-    <button class="about-trigger" id="aboutTrigger" aria-label="Open About and Contact">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
-    </button>
+    <div class="ui-actions">
+      <button class="toggle-3d" id="toggle3D" aria-label="Toggle 3D Mode" aria-pressed="false">
+        <span class="toggle-label">3D</span>
+        <span class="toggle-indicator"></span>
+      </button>
+
+      <button class="about-trigger" id="aboutTrigger" aria-label="Open About and Contact">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div class="scroll-indicator" id="scrollIndicator" aria-hidden="true">

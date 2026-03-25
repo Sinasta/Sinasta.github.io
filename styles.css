@@ -276,6 +276,74 @@ a,
   border-radius: 50%;
 }
 
+.ui-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* 3D Toggle Switch */
+.toggle-3d {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 8px 12px;
+  color: var(--fg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.ui-bar.visible .toggle-3d {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toggle-3d:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-3d:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.toggle-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.toggle-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--muted);
+  background: transparent;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* Active State */
+.toggle-3d.active .toggle-label {
+  color: var(--accent);
+}
+
+.toggle-3d.active .toggle-indicator {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
 .about-trigger {
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
@@ -289,10 +357,9 @@ a,
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto;
   flex-shrink: 0;
   
-  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease, opacity 0.6s ease;
   
   opacity: 0;
   transform: translateY(10px);
@@ -312,6 +379,27 @@ a,
 .about-trigger:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Mobile Layout for UI Actions */
+@media (max-width: 768px) {
+  .ui-bar {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+  }
+
+  .ui-actions {
+    flex-direction: column-reverse; /* Stacks items vertically: About (top), Toggle (bottom) */
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Reset transform for mobile to avoid issues with reverse column */
+  .ui-bar.visible .toggle-3d,
+  .ui-bar.visible .about-trigger {
+    transform: translateY(0);
+  }
 }
 
 .modal-overlay {
@@ -547,20 +635,16 @@ textarea {
 }
 
 .toast {
-  /* Match .project-info styling */
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
-  /* Match layout/aesthetics */
   border-radius: 4px;
   padding: 12px 18px;
   
-  /* Remove old contrasting styles */
   border: none;
   box-shadow: none;
 
-  /* Content styling */
   font-size: 14px;
   color: var(--fg);
   display: flex;
@@ -573,14 +657,6 @@ textarea {
   opacity: 0;
   transform: translateY(-20px);
   animation: toastSlideIn 0.3s ease forwards, toastFadeOut 0.3s ease 4.7s forwards;
-}
-
-.toast.success {
-  /* No border-left, keep clean like the panel */
-}
-
-.toast.error {
-  /* No border-left */
 }
 
 .toast-icon {

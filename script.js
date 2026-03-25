@@ -50,6 +50,7 @@ class ImageViewer {
     this.modalClose = document.getElementById('modalClose');
     this.contactForm = document.getElementById('contactForm');
     this.toastContainer = document.getElementById('toastContainer');
+    this.toggle3D = document.getElementById('toggle3D');
     this.lastFocusedElement = null;
     
     this.init();
@@ -78,6 +79,7 @@ class ImageViewer {
       this.createSlides();
       this.setupInteractionListeners();
       this.setupModalListeners();
+      this.setupToggle3D();
       this.setupScrollIndicator();
       this.showSlide(0);
       this.hideLoader();
@@ -169,6 +171,16 @@ class ImageViewer {
     if (activeImg) activeImg.classList.remove('pan-paused');
   }
 
+  setupToggle3D() {
+    if (!this.toggle3D) return;
+    
+    this.toggle3D.addEventListener('click', () => {
+      const isActive = this.toggle3D.classList.toggle('active');
+      this.toggle3D.setAttribute('aria-pressed', isActive);
+      // Logic for 3D mode will go here later
+    });
+  }
+
   setupModalListeners() {
     this.aboutTrigger.addEventListener('click', () => {
       this.openModal();
@@ -205,7 +217,7 @@ class ImageViewer {
         });
         
         if (response.ok) {
-          this.showToast('success', 'Message sent!');
+          this.showToast('success', 'Message sent! I\'ll get back to you soon.');
           this.contactForm.reset();
           this.closeModal();
         } else {
@@ -235,7 +247,6 @@ class ImageViewer {
     toast.innerHTML = `${iconSvg}<span>${message}</span>`;
     this.toastContainer.appendChild(toast);
 
-    // Remove the toast after animation completes (5s)
     setTimeout(() => {
       if (toast.parentNode) {
         toast.parentNode.removeChild(toast);
