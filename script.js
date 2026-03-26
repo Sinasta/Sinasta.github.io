@@ -110,7 +110,7 @@ class ImageViewer {
         else this.prevSlide();
         this.resetSchedule();
         this.scrollAccumulated = 0;
-        setTimeout(() => { this.isInteracting = false; }, 800);
+        setTimeout(() => { this.isInteracting = false; }, 100);
       }
     }, { passive: true });
 
@@ -238,7 +238,8 @@ class ImageViewer {
         
         const currentImg = this.images[this.currentIndex];
         
-        this.splatViewer.loadSplat(currentImg.id, () => {
+        // Pass focusY to apply the same vertical shift as the 2D image
+        this.splatViewer.loadSplat(currentImg.id, currentImg.focusY, () => {
           splatLoader.hidden = true;
           this.container.style.transition = 'opacity 0.3s ease';
           this.container.style.opacity = '0';
@@ -370,7 +371,8 @@ class ImageViewer {
 
     if (this.is3DMode && this.splatViewer) {
       const currentImg = this.images[index];
-      this.splatViewer.loadSplat(currentImg.id);
+      // Pass focusY to maintain the same vertical alignment when switching projects in 3D mode
+      this.splatViewer.loadSplat(currentImg.id, currentImg.focusY);
     } else {
       this.slides.forEach(slide => {
         const img = slide.querySelector('img');

@@ -14,11 +14,13 @@ export class SplatViewer {
         this.boundResize = null;
         this.isDisposed = false;
         this.loadTimeout = null;
+        this.currentFocusY = "50%";
+        this.shiftScale = 3.5;
     }
 
     async init() {
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(34, window.innerWidth / window.innerHeight, 0.01, 1000);
+        const camera = new THREE.PerspectiveCamera(33, window.innerWidth / window.innerHeight, 0.01, 1000);
         camera.position.set(0, 0, 0);
         camera.lookAt(0, 0, 1);
 
@@ -50,8 +52,12 @@ export class SplatViewer {
 
         this.boundResize = () => {
             if (window.innerWidth < 768) return;
+            
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
+            this.camera.clearViewOffset();
+            this.applyViewOffset(this.currentFocusY);
+            
             const pr = Math.min(window.devicePixelRatio, 2);
             this.renderer.setPixelRatio(pr);
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -63,8 +69,28 @@ export class SplatViewer {
         this.renderer.setAnimationLoop(this.animate.bind(this));
     }
 
-    loadSplat(id, onLoadCallback = null) {
+    applyViewOffset(focusYString) {
+        if (!this.camera) return;
+        
+        const percent = parseFloat(focusYString) || 50;
+
+        const offsetY = (percent - 50) * this.shiftScale;
+        
+        this.camera.setViewOffset(
+            window.innerWidth,
+            window.innerHeight,
+            0,
+            offsetY,
+            window.innerWidth,
+            window.innerHeight
+        );
+    }
+
+    loadSplat(id, focusY = "50%", onLoadCallback = null) {
         if (!this.scene || this.isDisposed) return;
+        
+        this.currentFocusY = focusY;
+        this.applyViewOffset(focusY);
         
         if (this.loadTimeout) clearTimeout(this.loadTimeout);
         
@@ -112,6 +138,7 @@ export class SplatViewer {
         if (!this.camera || this.isDisposed) return;
         
         const baseZ = this.camera.position.z;
+        
         this.camera.position.x += (this.mouseX * 0.5 - this.camera.position.x) * 0.05;
         this.camera.position.y += (-this.mouseY * 0.5 - this.camera.position.y) * 0.05;
         this.camera.position.z = baseZ;
