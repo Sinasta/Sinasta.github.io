@@ -100,7 +100,6 @@ export class SplatViewer {
         this.scene.add(splatMesh); 
         this.currentSplatMesh = splatMesh;
 
-        // Safety timeout: trigger callback after 3 seconds if onLoad didn't fire
         this.loadTimeout = setTimeout(() => {
             if (!hasLoaded && onLoadCallback) {
                 hasLoaded = true;
@@ -112,7 +111,6 @@ export class SplatViewer {
     animate() {
         if (!this.camera || this.isDisposed) return;
         
-        // Original smooth parallax (reverted)
         const baseZ = this.camera.position.z;
         this.camera.position.x += (this.mouseX * 0.5 - this.camera.position.x) * 0.05;
         this.camera.position.y += (-this.mouseY * 0.5 - this.camera.position.y) * 0.05;

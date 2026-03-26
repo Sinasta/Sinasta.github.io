@@ -1,40 +1,4 @@
-const CONFIG = {
-  IMAGE_PATH: 'images/',
-  IMAGE_FORMAT: 'webp',
-  SPLAT_PATH: './splats/',
-
-  PROJECT_DATA: {
-    25: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
-    24: { title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
-    23: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
-    22: { title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
-    21: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "85%", prize: 1 },
-    20: { title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "70%", prize: 1 },
-    19: { title: "Horb am Neckar", titleLink: "https://www.competitionline.com/de/news/ergebnisse/rueckbau-ortsdurchfahrt-und-neugestaltung-innenstadt-horb-am-neckar-562061/prizegroup/1-preis-zuschlag-192412.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/horb-am-neckar", focusY: "50%", prize: 1 },
-    18: { title: "Alice-Salomon-Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "80%", prize: null },
-    17: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "70%", prize: 2 },
-    16: { title: "Ernst-Abbe-Platz - Jena", titleLink: "https://www.competitionline.com/de/news/ergebnisse/klimaangepasste-platzgestaltung-ernst-abbe-platz-in-jena-592546/prizegroup/2-preis-202426.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/ernst-abbe-platz", focusY: "55%", prize: 2 },
-    15: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "55%", prize: "recognition" },
-    14: { title: "Stahlwerkspark - Oberhausen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gestaltung-stahlwerkspark-in-oberhausen-572729/prizegroup/anerkennung-193706.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/stahlwerkspark-oberhausen", focusY: "70%", prize: "recognition" },
-    13: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "20%", prize: null },
-    12: { title: "Wilhelm-Leuschner-Platz - Leipzig", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/leipzig-leuschner", focusY: "50%", prize: null },
-    11: { title: "Altmarkt - Duisburg", titleLink: "https://www.competitionline.com/de/news/ergebnisse/umgestaltung-altmarkt-alt-hamborn-in-duisburg-557619/prizegroup/3-preis-190478.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/alt-hamborn", focusY: "50%", prize: 3 },
-    10: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "80%", prize: "recognition" },
-    9: { title: "Marktplatz - Vilseck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-marktplatz-vilseck-520308/prizegroup/anerkennung-176405.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/vilseck", focusY: "95%", prize: "recognition" },
-    8: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%", prize: 3 },
-    7: { title: "Inklusives Quartier - Reutlingen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/quartiersentwicklung-konradsiedlung-in-regensburg-546558/prizegroup/3-preis-192170.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/rappertshofen", focusY: "70%", prize: 3 },
-    6: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%", prize: 2 },
-    5: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "40%", prize: 2 },
-    4: { title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%", prize: 2 },
-    3: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "80%", prize: null },
-    2: { title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "55%", prize: null },
-    1: { title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%", prize: 3 }
-  },
-  
-  DESKTOP_DURATION: 12000,
-  MOBILE_PAN_DURATION: 12000,
-  PRELOAD_COUNT: 2
-};
+import { CONFIG, PROJECTS } from './config.js';
 
 class ImageViewer {
   constructor() {
@@ -59,7 +23,6 @@ class ImageViewer {
     this.is3DMode = false;
     this.splatViewer = null;
     
-    // Scroll accumulation variables
     this.scrollAccumulated = 0;
     this.scrollTimeout = null;
     
@@ -67,19 +30,18 @@ class ImageViewer {
   }
   
   async init() {
-    const keys = Object.keys(CONFIG.PROJECT_DATA).map(Number).sort((a, b) => b - a);
+    const sortedProjects = [...PROJECTS].sort((a, b) => b.id - a.id);
     
-    keys.forEach(id => {
-      const data = CONFIG.PROJECT_DATA[id];
+    sortedProjects.forEach(project => {
       this.images.push({
-        id: id,
-        src: `${CONFIG.IMAGE_PATH}${id}.${CONFIG.IMAGE_FORMAT}`,
-        title: data.title || "",
-        titleLink: data.titleLink || null,
-        office: data.office || "",
-        officeLink: data.officeLink || null,
-        focusY: data.focusY || null,
-        prize: data.prize || null
+        id: project.id,
+        src: `${CONFIG.IMAGE_PATH}${project.id}.${CONFIG.IMAGE_FORMAT}`,
+        title: project.title || "",
+        titleLink: project.titleLink || null,
+        office: project.office || "",
+        officeLink: project.officeLink || null,
+        focusY: project.focusY || "50%",
+        prize: project.prize || null
       });
     });
 
@@ -281,9 +243,6 @@ class ImageViewer {
           this.container.style.transition = 'opacity 0.3s ease';
           this.container.style.opacity = '0';
           this.splatContainer.style.opacity = '1';
-          
-          // Note: Browsers do not allow moving the visible cursor to center.
-          // The 3D view starts centered by default (mouseX/Y = 0).
         });
         
         if (this.slideTimeout) clearTimeout(this.slideTimeout);
