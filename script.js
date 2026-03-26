@@ -59,6 +59,10 @@ class ImageViewer {
     this.is3DMode = false;
     this.splatViewer = null;
     
+    // Scroll accumulation variables
+    this.scrollAccumulated = 0;
+    this.scrollTimeout = null;
+    
     this.init();
   }
   
@@ -132,12 +136,19 @@ class ImageViewer {
   setupInteractionListeners() {
     window.addEventListener('wheel', (e) => {
       if (this.isInteracting || this.modalOverlay.classList.contains('active')) return;
-      if (Math.abs(e.deltaY) > 10) {
+      
+      this.scrollAccumulated += e.deltaY;
+      
+      clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(() => { this.scrollAccumulated = 0; }, 150);
+      
+      if (Math.abs(this.scrollAccumulated) > 80) {
         this.isInteracting = true;
-        if (e.deltaY > 0) this.nextSlide();
+        if (this.scrollAccumulated > 0) this.nextSlide();
         else this.prevSlide();
         this.resetSchedule();
-        setTimeout(() => { this.isInteracting = false; }, 300);
+        this.scrollAccumulated = 0;
+        setTimeout(() => { this.isInteracting = false; }, 800);
       }
     }, { passive: true });
 
@@ -190,38 +201,34 @@ class ImageViewer {
     if (activeImg) activeImg.classList.remove('pan-paused');
   }
 
-  // NEW METHOD: Exit 3D mode and navigate to specific slide
   exit3DAndShowSlide(targetIndex) {
-    // 1. Update 2D slides to target index immediately (behind the 3D view)
+    const splatLoader = document.getElementById('splatLoader');
+    if (splatLoader) splatLoader.hidden = true;
+    
     this.currentIndex = targetIndex;
     
-    // Update 2D DOM
     this.slides.forEach((slide, i) => {
       const img = slide.querySelector('img');
       if (img) {
         img.style.animation = 'none';
-        void img.offsetHeight; // Trigger reflow
+        void img.offsetHeight;
         img.style.animation = '';
       }
       slide.classList.toggle('active', i === targetIndex);
     });
     
-    // Update info box
     this.updateInfoBox(this.images[targetIndex]);
     this.preloadAhead(targetIndex);
     
-    // 2. Trigger 3D to 2D transition (fade out splat, fade in 2D)
     this.splatContainer.style.transition = 'opacity 0.3s ease';
     this.container.style.transition = 'opacity 0.3s ease';
     this.splatContainer.style.opacity = '0';
     this.container.style.opacity = '1';
     
-    // 3. Update state to 2D mode
     this.is3DMode = false;
     this.toggle3D.classList.remove('active');
     this.toggle3D.setAttribute('aria-pressed', 'false');
     
-    // 4. Cleanup 3D resources after transition completes
     setTimeout(() => {
       this.splatContainer.hidden = true;
       this.splatContainer.style.zIndex = '';
@@ -235,7 +242,6 @@ class ImageViewer {
       }
     }, 600);
     
-    // 5. Restart 2D slideshow timer
     this.scheduleNextSlide();
   }
 
@@ -252,13 +258,15 @@ class ImageViewer {
       const isActive = this.toggle3D.classList.toggle('active');
       this.toggle3D.setAttribute('aria-pressed', isActive);
       this.is3DMode = isActive;
+      const splatLoader = document.getElementById('splatLoader');
 
       if (isActive) {
-        // Switch to 3D: Show splat container but keep it invisible until loaded
+        splatLoader.hidden = false;
+        
         this.splatContainer.hidden = false;
         this.splatContainer.style.opacity = '0';
         this.splatContainer.style.transition = 'opacity 0.3s ease';
-        this.splatContainer.style.zIndex = '10'; // Above image container
+        this.splatContainer.style.zIndex = '10';
         
         if (!this.splatViewer) {
           const { SplatViewer } = await import('./splat.js');
@@ -268,17 +276,19 @@ class ImageViewer {
         
         const currentImg = this.images[this.currentIndex];
         
-        // Load splat with callback for when it's ready
         this.splatViewer.loadSplat(currentImg.id, () => {
-          // Crossfade once loaded
+          splatLoader.hidden = true;
           this.container.style.transition = 'opacity 0.3s ease';
           this.container.style.opacity = '0';
           this.splatContainer.style.opacity = '1';
+          
+          // Note: Browsers do not allow moving the visible cursor to center.
+          // The 3D view starts centered by default (mouseX/Y = 0).
         });
         
         if (this.slideTimeout) clearTimeout(this.slideTimeout);
       } else {
-        // Switch back to 2D manually (button click)
+        splatLoader.hidden = true;
         this.splatContainer.style.opacity = '0';
         this.container.style.opacity = '1';
         
@@ -376,6 +386,7 @@ class ImageViewer {
   openModal() {
     this.modalOverlay.classList.add('active');
     this.modalOverlay.hidden = false;
+    this.modalOverlay.style.display = '';
     document.body.style.overflow = 'hidden';
     this.lastFocusedElement = document.activeElement;
     
@@ -506,7 +517,6 @@ class ImageViewer {
     this.scheduleNextSlide();
   }
   
-  // MODIFIED: Check if in 3D mode and exit to 2D instead of loading next 3D
   nextSlide() {
     const nextIndex = (this.currentIndex + 1) % this.images.length;
     if (this.is3DMode) {
@@ -516,7 +526,6 @@ class ImageViewer {
     }
   }
 
-  // MODIFIED: Check if in 3D mode and exit to 2D instead of loading prev 3D
   prevSlide() {
     const prevIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
     if (this.is3DMode) {

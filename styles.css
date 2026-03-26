@@ -72,6 +72,36 @@ a,
   height: 100%;
 }
 
+/* Splat Loader Styles */
+.splat-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 15;
+  pointer-events: none;
+}
+
+.splat-loader[hidden] {
+  display: none !important;
+}
+
+.splat-loader-spinner {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(201, 169, 98, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: loaderSpin 0.8s linear infinite;
+}
+
+@keyframes loaderSpin {
+  to { transform: rotate(360deg); }
+}
+
 .loader {
   position: fixed;
   inset: 0;
