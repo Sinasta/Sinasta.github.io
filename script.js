@@ -211,42 +211,70 @@ class ImageViewer {
     if (!this.toggle3D) return;
     
     if (window.innerWidth < 769) {
-        this.toggle3D.style.display = 'none';
+      this.toggle3D.style.display = 'none';
+      return;
     }
 
+    let isTransitioning = false;
+
     this.toggle3D.addEventListener('click', async () => {
-      if (window.innerWidth < 769) return;
+      if (isTransitioning) return;
+      isTransitioning = true;
 
-      const isActive = this.toggle3D.classList.toggle('active');
+      const isActive = !this.toggle3D.classList.contains('active');
+      this.toggle3D.classList.toggle('active', isActive);
       this.toggle3D.setAttribute('aria-pressed', isActive);
-      this.is3DMode = isActive;
+      
       const splatLoader = document.getElementById('splatLoader');
-
+      
       if (isActive) {
         splatLoader.hidden = false;
         
         this.splatContainer.hidden = false;
         this.splatContainer.style.opacity = '0';
-        this.splatContainer.style.transition = 'opacity 0.3s ease';
         this.splatContainer.style.zIndex = '10';
         
-        if (!this.splatViewer) {
-          const { SplatViewer } = await import('./splat.js');
-          this.splatViewer = new SplatViewer(this.splatContainer);
-          await this.splatViewer.init();
+        try {
+          if (!this.splatViewer) {
+            const { SplatViewer } = await import('./splat.js');
+            this.splatViewer = new SplatViewer(this.splatContainer);
+            await this.splatViewer.init();
+            
+            if (!this.splatViewer.renderer || !this.splatViewer.renderer.getContext()) {
+              throw new Error('WebGL context failed to initialize');
+            }
+          }
+          
+          const currentImg = this.images[this.currentIndex];
+          
+          const loadPromise = new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              reject(new Error('Splat load timeout'));
+            }, 10000);
+            
+            this.splatViewer.loadSplat(currentImg.id, currentImg.focusY, () => {
+              clearTimeout(timeout);
+              resolve();
+            });
+          });
+          
+          await loadPromise;
+          
+          requestAnimationFrame(() => {
+            this.container.style.transition = 'opacity 0.3s ease';
+            this.container.style.opacity = '0';
+            this.splatContainer.style.opacity = '1';
+            splatLoader.hidden = true;
+          });
+          
+          this.is3DMode = true;
+          if (this.slideTimeout) clearTimeout(this.slideTimeout);
+          
+        } catch (error) {
+          console.error('3D mode failed:', error);
+          this.showToast('error', '3D view unavailable. Please try again.');
+          this.exit3DAndShowSlide(this.currentIndex);
         }
-        
-        const currentImg = this.images[this.currentIndex];
-        
-        // Pass focusY to apply the same vertical shift as the 2D image
-        this.splatViewer.loadSplat(currentImg.id, currentImg.focusY, () => {
-          splatLoader.hidden = true;
-          this.container.style.transition = 'opacity 0.3s ease';
-          this.container.style.opacity = '0';
-          this.splatContainer.style.opacity = '1';
-        });
-        
-        if (this.slideTimeout) clearTimeout(this.slideTimeout);
       } else {
         splatLoader.hidden = true;
         this.splatContainer.style.opacity = '0';
@@ -263,10 +291,14 @@ class ImageViewer {
             this.splatViewer.dispose();
             this.splatViewer = null;
           }
+          this.is3DMode = false;
+          this.scheduleNextSlide();
         }, 600);
-        
-        this.scheduleNextSlide();
       }
+      
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 700);
     });
   }
 
@@ -371,7 +403,6 @@ class ImageViewer {
 
     if (this.is3DMode && this.splatViewer) {
       const currentImg = this.images[index];
-      // Pass focusY to maintain the same vertical alignment when switching projects in 3D mode
       this.splatViewer.loadSplat(currentImg.id, currentImg.focusY);
     } else {
       this.slides.forEach(slide => {

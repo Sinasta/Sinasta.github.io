@@ -16,6 +16,7 @@ export class SplatViewer {
         this.loadTimeout = null;
         this.currentFocusY = "50%";
         this.shiftScale = 3.5;
+        this.isContextLost = false;
     }
 
     async init() {
@@ -35,6 +36,20 @@ export class SplatViewer {
         const pixelRatio = Math.min(window.devicePixelRatio, 2);
         renderer.setPixelRatio(pixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        const canvas = renderer.domElement;
+        canvas.addEventListener('webglcontextlost', (e) => {
+            console.warn('WebGL context lost in SplatViewer');
+            e.preventDefault();
+            this.isContextLost = true;
+            this.isDisposed = true;
+        }, false);
+        
+        canvas.addEventListener('webglcontextrestored', () => {
+            console.log('WebGL context restored in SplatViewer');
+            this.isContextLost = false;
+            this.isDisposed = false;
+        }, false);
         
         this.container.innerHTML = '';
         this.container.appendChild(renderer.domElement);
@@ -86,8 +101,11 @@ export class SplatViewer {
         );
     }
 
-    loadSplat(id, focusY = "50%", onLoadCallback = null) {
-        if (!this.scene || this.isDisposed) return;
+    loadSplat(id, focusY = "50%", onLoadCallback = null, onErrorCallback = null) {
+        if (!this.scene || this.isDisposed || this.isContextLost) {
+            if (onErrorCallback) onErrorCallback(new Error('Viewer not ready or context lost'));
+            return;
+        }
         
         this.currentFocusY = focusY;
         this.applyViewOffset(focusY);
@@ -101,6 +119,7 @@ export class SplatViewer {
         
         const url = `./splats/${id}.ply`;
         let hasLoaded = false;
+        let hasError = false;
 
         const splatMesh = new SplatMesh({ 
             url: url,
@@ -110,13 +129,20 @@ export class SplatViewer {
             maxPixelRadius: 32,
             stochastic: true,
             onLoad: () => { 
-                if (hasLoaded) return;
+                if (hasLoaded || hasError) return;
                 hasLoaded = true;
                 
                 splatMesh.rotation.y = Math.PI;
                 if (this.loadTimeout) clearTimeout(this.loadTimeout);
                 
                 if (onLoadCallback) onLoadCallback();
+            },
+            onError: (error) => {
+                if (hasLoaded || hasError) return;
+                hasError = true;
+                console.error('SplatMesh load error:', error);
+                if (this.loadTimeout) clearTimeout(this.loadTimeout);
+                if (onErrorCallback) onErrorCallback(error);
             }
         });
         
@@ -127,15 +153,16 @@ export class SplatViewer {
         this.currentSplatMesh = splatMesh;
 
         this.loadTimeout = setTimeout(() => {
-            if (!hasLoaded && onLoadCallback) {
-                hasLoaded = true;
-                onLoadCallback();
+            if (!hasLoaded && !hasError) {
+                hasError = true;
+                console.warn('Splat load timeout');
+                if (onErrorCallback) onErrorCallback(new Error('Load timeout'));
             }
-        }, 3000);
+        }, 10000);
     }
 
     animate() {
-        if (!this.camera || this.isDisposed) return;
+        if (!this.camera || this.isDisposed || this.isContextLost) return;
         
         const baseZ = this.camera.position.z;
         
@@ -143,7 +170,12 @@ export class SplatViewer {
         this.camera.position.y += (-this.mouseY * 0.5 - this.camera.position.y) * 0.05;
         this.camera.position.z = baseZ;
         
-        this.renderer.render(this.scene, this.camera);
+        try {
+            this.renderer.render(this.scene, this.camera);
+        } catch (error) {
+            console.error('Render error:', error);
+            this.isDisposed = true;
+        }
     }
 
     dispose() {
