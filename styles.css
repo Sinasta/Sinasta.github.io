@@ -431,7 +431,7 @@ a,
   }
 
   .toggle-3d {
-    display: none;
+    display: flex;
   }
 
   .ui-actions {
@@ -741,5 +741,53 @@ textarea {
   .toast {
     width: 100%;
     max-width: none;
+  }
+}
+
+.video-container {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.video-container[hidden] {
+  display: none !important;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .video-container video {
+    object-position: left center;
+    animation: videoPanRight var(--pan-duration) linear forwards;
+    animation-play-state: running;
+  }
+
+  .video-container.paused video {
+    animation-play-state: paused !important;
+  }
+
+  @keyframes videoPanRight {
+    0% { object-position: left center; }
+    100% { object-position: right center; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-container video {
+    animation: none !important;
+    object-position: center !important;
   }
 }

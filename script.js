@@ -4,6 +4,7 @@ class ImageViewer {
   constructor() {
     this.container = document.getElementById('imageContainer');
     this.splatContainer = document.getElementById('splatContainer');
+    this.videoContainer = null;
     this.loader = document.getElementById('loader');
     this.projectInfoEl = document.getElementById('projectInfo');
     this.uiBar = document.getElementById('uiBar');
@@ -21,7 +22,10 @@ class ImageViewer {
     this.lastFocusedElement = null;
 
     this.is3DMode = false;
+    this.isVideoMode = false;
     this.splatViewer = null;
+    this.currentVideo = null;
+    this.videoWasPlaying = false;
     
     this.scrollAccumulated = 0;
     this.scrollTimeout = null;
@@ -36,6 +40,7 @@ class ImageViewer {
       this.images.push({
         id: project.id,
         src: `${CONFIG.IMAGE_PATH}${project.id}.${CONFIG.IMAGE_FORMAT}`,
+        videoSrc: `${CONFIG.VIDEO_PATH}${project.id}.${CONFIG.VIDEO_FORMAT}`,
         title: project.title || "",
         titleLink: project.titleLink || null,
         office: project.office || "",
@@ -47,6 +52,8 @@ class ImageViewer {
 
     document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
 
+    this.createVideoContainer();
+
     await this.preloadImages();
     this.createSlides();
     this.setupInteractionListeners();
@@ -56,6 +63,14 @@ class ImageViewer {
     this.showSlide(0);
     this.hideLoader();
     this.scheduleNextSlide();
+  }
+
+  createVideoContainer() {
+    this.videoContainer = document.createElement('div');
+    this.videoContainer.id = 'videoContainer';
+    this.videoContainer.className = 'video-container';
+    this.videoContainer.hidden = true;
+    document.body.appendChild(this.videoContainer);
   }
   
   preloadImages() {
@@ -153,14 +168,127 @@ class ImageViewer {
 
   pausePanAnimation() {
     if (this.is3DMode) return;
+    
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.add('pan-paused');
+    
+    if (this.isVideoMode && this.videoContainer) {
+      this.videoContainer.classList.add('paused');
+    }
   }
 
   resumePanAnimation() {
     if (this.is3DMode) return;
+    
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.remove('pan-paused');
+    
+    if (this.isVideoMode && this.videoContainer) {
+      this.videoContainer.classList.remove('paused');
+    }
+  }
+
+
+  isMobile() {
+    return window.innerWidth < 769 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
+  async loadVideo(index, is3DMode = false) {
+  const videoData = this.images[index];
+  if (this.currentVideo) {
+    this.currentVideo.pause();
+    this.currentVideo.remove();
+    this.currentVideo = null;
+  }
+
+  const playbackRate = is3DMode ? 0.5 : 0.25;
+  const panDuration = is3DMode ? 6000 : 12000;
+
+  document.documentElement.style.setProperty('--pan-duration', `${panDuration}ms`);
+
+  const video = document.createElement('video');
+  video.src = videoData.videoSrc;
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.playbackRate = playbackRate;
+  video.style.width = '100%';
+  video.style.height = '100%';
+
+  await new Promise((resolve, reject) => {
+    video.onloadeddata = resolve;
+    video.onerror = reject;
+    setTimeout(resolve, 3000);
+  });
+
+  this.videoContainer.innerHTML = '';
+  this.videoContainer.appendChild(video);
+  this.currentVideo = video;
+
+  try {
+    await video.play();
+  } catch (e) {
+    console.warn('Video autoplay failed:', e);
+  }
+  }
+
+  async enterVideoMode() {
+  this.isVideoMode = true;
+  this.videoContainer.hidden = false;
+  this.container.style.opacity = '0';
+  await this.loadVideo(this.currentIndex, true);
+
+  this.videoContainer.style.opacity = '1';
+  if (this.slideTimeout) clearTimeout(this.slideTimeout);
+  }
+
+  exitVideoMode() {
+  this.isVideoMode = false;
+  document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
+
+  this.videoContainer.style.opacity = '0';
+  this.container.style.opacity = '1';
+  if (this.currentVideo) {
+    this.currentVideo.pause();
+    this.currentVideo.remove();
+    this.currentVideo = null;
+  }
+
+  setTimeout(() => {
+    this.videoContainer.hidden = true;
+    this.scheduleNextSlide();
+  }, 300);
+  }
+
+  pausePanAnimation() {
+  if (this.is3DMode) return;
+
+  const activeImg = this.container.querySelector('.image-slide.active img');
+  if (activeImg) activeImg.classList.add('pan-paused');
+
+  if (this.isVideoMode && this.videoContainer) {
+    this.videoContainer.classList.add('paused');
+    if (this.currentVideo && !this.currentVideo.paused) {
+      this.currentVideo.pause();
+      this.videoWasPlaying = true;
+    }
+  }
+  }
+
+  resumePanAnimation() {
+  if (this.is3DMode) return;
+
+  const activeImg = this.container.querySelector('.image-slide.active img');
+  if (activeImg) activeImg.classList.remove('pan-paused');
+
+  if (this.isVideoMode && this.videoContainer) {
+    this.videoContainer.classList.remove('paused');
+    if (this.currentVideo && this.videoWasPlaying) {
+      this.currentVideo.play().catch(() => {});
+      this.videoWasPlaying = false;
+    }
+  }
   }
 
   exit3DAndShowSlide(targetIndex) {
@@ -210,10 +338,7 @@ class ImageViewer {
   setupToggle3D() {
     if (!this.toggle3D) return;
     
-    if (window.innerWidth < 769) {
-      this.toggle3D.style.display = 'none';
-      return;
-    }
+    this.toggle3D.style.display = 'flex';
 
     let isTransitioning = false;
 
@@ -228,6 +353,12 @@ class ImageViewer {
       const splatLoader = document.getElementById('splatLoader');
       
       if (isActive) {
+        if (this.isMobile()) {
+          await this.enterVideoMode();
+          isTransitioning = false;
+          return;
+        }
+        
         splatLoader.hidden = false;
         
         this.splatContainer.hidden = false;
@@ -277,23 +408,28 @@ class ImageViewer {
         }
       } else {
         splatLoader.hidden = true;
-        this.splatContainer.style.opacity = '0';
-        this.container.style.opacity = '1';
         
-        setTimeout(() => {
-          this.splatContainer.hidden = true;
-          this.splatContainer.style.zIndex = '';
-          this.splatContainer.style.opacity = '';
-          this.splatContainer.style.transition = '';
-          this.container.style.transition = '';
+        if (this.isVideoMode) {
+          this.exitVideoMode();
+        } else if (this.is3DMode) {
+          this.splatContainer.style.opacity = '0';
+          this.container.style.opacity = '1';
           
-          if (this.splatViewer) {
-            this.splatViewer.dispose();
-            this.splatViewer = null;
-          }
-          this.is3DMode = false;
-          this.scheduleNextSlide();
-        }, 600);
+          setTimeout(() => {
+            this.splatContainer.hidden = true;
+            this.splatContainer.style.zIndex = '';
+            this.splatContainer.style.opacity = '';
+            this.splatContainer.style.transition = '';
+            this.container.style.transition = '';
+            
+            if (this.splatViewer) {
+              this.splatViewer.dispose();
+              this.splatViewer = null;
+            }
+            this.is3DMode = false;
+            this.scheduleNextSlide();
+          }, 600);
+        }
       }
       
       setTimeout(() => {
@@ -401,6 +537,12 @@ class ImageViewer {
 
     this.currentIndex = index;
 
+    if (this.isVideoMode) {
+      this.loadVideo(index);
+      this.updateInfoBox(this.images[index]);
+      return;
+    }
+
     if (this.is3DMode && this.splatViewer) {
       const currentImg = this.images[index];
       this.splatViewer.loadSplat(currentImg.id, currentImg.focusY);
@@ -481,7 +623,7 @@ class ImageViewer {
   }
   
   preloadAhead(currentIndex) {
-    if (this.is3DMode) return;
+    if (this.is3DMode || this.isVideoMode) return;
     
     for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
       const nextIndex = currentIndex + i;
