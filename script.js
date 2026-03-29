@@ -241,10 +241,13 @@ class ImageViewer {
 
   this.videoContainer.style.opacity = '1';
   if (this.slideTimeout) clearTimeout(this.slideTimeout);
+
+  this.scheduleNextSlide();
   }
 
   exitVideoMode() {
   this.isVideoMode = false;
+  this.showSlide(this.currentIndex);
   document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
 
   this.videoContainer.style.opacity = '0';
@@ -538,7 +541,7 @@ class ImageViewer {
     this.currentIndex = index;
 
     if (this.isVideoMode) {
-      this.loadVideo(index);
+      this.loadVideo(index, true);
       this.updateInfoBox(this.images[index]);
       return;
     }
@@ -637,8 +640,15 @@ class ImageViewer {
   scheduleNextSlide() {
     if (this.is3DMode) return;
 
-    const isMobile = window.innerWidth <= 768;
-    const delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
+    let delay;
+    if (this.isVideoMode) {
+      // Video mode (mobile 3D) always uses 6 seconds
+      delay = 6000;
+    } else {
+      const isMobile = window.innerWidth <= 768;
+      delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
+    }
+
     if (this.slideTimeout) clearTimeout(this.slideTimeout);
     
     this.slideTimeout = setTimeout(() => {
