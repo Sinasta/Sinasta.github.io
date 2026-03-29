@@ -103,6 +103,16 @@ class ImageViewer {
         image.style.objectPosition = `center ${img.focusY}`;
       }
       
+      image.addEventListener('animationend', (e) => {
+        if (e.animationName === 'panRight' && 
+            slide.classList.contains('active') && 
+            !this.isInteracting && 
+            !this.isVideoMode && 
+            !this.is3DMode) {
+          this.nextSlide();
+        }
+      });
+      
       slide.appendChild(image);
       this.container.appendChild(slide);
     });
@@ -147,10 +157,7 @@ class ImageViewer {
         this.isInteracting = true;
         if (diff > 0) this.nextSlide();
         else this.prevSlide();
-        this.resetSchedule();
         setTimeout(() => { this.isInteracting = false; }, 300);
-      } else {
-        this.scheduleNextSlide();
       }
       
       this.resumePanAnimation();
@@ -161,137 +168,170 @@ class ImageViewer {
       this.resumePanAnimation();
       if (this.isHolding) {
         this.isHolding = false;
-        this.scheduleNextSlide();
       }
     }, { passive: true });
   }
 
   pausePanAnimation() {
     if (this.is3DMode) return;
-    
+
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.add('pan-paused');
-    
+
     if (this.isVideoMode && this.videoContainer) {
       this.videoContainer.classList.add('paused');
+      if (this.currentVideo && !this.currentVideo.paused) {
+        this.currentVideo.pause();
+        this.videoWasPlaying = true;
+      }
     }
   }
 
   resumePanAnimation() {
     if (this.is3DMode) return;
-    
+
     const activeImg = this.container.querySelector('.image-slide.active img');
     if (activeImg) activeImg.classList.remove('pan-paused');
-    
+
     if (this.isVideoMode && this.videoContainer) {
       this.videoContainer.classList.remove('paused');
+      if (this.currentVideo && this.videoWasPlaying) {
+        this.currentVideo.play().catch(() => {});
+        this.videoWasPlaying = false;
+      }
     }
   }
-
 
   isMobile() {
     return window.innerWidth < 769 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
-  async loadVideo(index, is3DMode = false) {
-  const videoData = this.images[index];
-  if (this.currentVideo) {
-    this.currentVideo.pause();
-    this.currentVideo.remove();
-    this.currentVideo = null;
+  getCurrentPanProgress() {
+    if (!this.isMobile()) return 0;
+    
+    let element;
+    if (this.isVideoMode && this.currentVideo) {
+      element = this.currentVideo;
+    } else {
+      const activeSlide = this.container.querySelector('.image-slide.active');
+      element = activeSlide ? activeSlide.querySelector('img') : null;
+    }
+    
+    if (!element) return 0;
+    
+    try {
+      const computedStyle = window.getComputedStyle(element);
+      const objectPos = computedStyle.objectPosition;
+      
+      let percent;
+      if (objectPos.includes('left')) {
+        percent = 0;
+      } else if (objectPos.includes('right')) {
+        percent = 100;
+      } else if (objectPos.includes('center')) {
+        percent = 50;
+      } else {
+        const match = objectPos.match(/([\d.]+)%/);
+        if (match) {
+          percent = parseFloat(match[1]);
+        } else {
+          percent = 50;
+        }
+      }
+      
+      return percent / 100;
+    } catch (e) {
+      console.warn('Could not read pan position:', e);
+      return 0;
+    }
   }
 
-  const playbackRate = is3DMode ? 0.5 : 0.25;
-  const panDuration = is3DMode ? 6000 : 12000;
+  async loadVideo(index, startProgress = 0) {
+    const videoData = this.images[index];
+    if (this.currentVideo) {
+      this.currentVideo.pause();
+      this.currentVideo.remove();
+      this.currentVideo = null;
+    }
 
-  document.documentElement.style.setProperty('--pan-duration', `${panDuration}ms`);
+    const playbackRate = CONFIG.VIDEO_DURATION / CONFIG.MOBILE_PAN_DURATION;
+    const duration = CONFIG.MOBILE_PAN_DURATION;
 
-  const video = document.createElement('video');
-  video.src = videoData.videoSrc;
-  video.autoplay = true;
-  video.loop = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.playbackRate = playbackRate;
-  video.style.width = '100%';
-  video.style.height = '100%';
+    const video = document.createElement('video');
+    video.src = videoData.videoSrc;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.playbackRate = playbackRate;
+    video.style.width = '100%';
+    video.style.height = '100%';
+    
+    if (startProgress > 0) {
+      const delaySeconds = -(startProgress * (duration / 1000));
+      video.style.animationDelay = `${delaySeconds}s`;
+    }
 
-  await new Promise((resolve, reject) => {
-    video.onloadeddata = resolve;
-    video.onerror = reject;
-    setTimeout(resolve, 3000);
-  });
+    video.addEventListener('animationend', (e) => {
+      if (e.animationName === 'videoPanRight' && 
+          this.isVideoMode && 
+          this.currentVideo === video && 
+          !this.isInteracting) {
+        this.nextSlide();
+      }
+    });
 
-  this.videoContainer.innerHTML = '';
-  this.videoContainer.appendChild(video);
-  this.currentVideo = video;
+    await new Promise((resolve, reject) => {
+      video.onloadeddata = resolve;
+      video.onerror = reject;
+      setTimeout(resolve, 3000);
+    });
 
-  try {
-    await video.play();
-  } catch (e) {
-    console.warn('Video autoplay failed:', e);
-  }
+    this.videoContainer.innerHTML = '';
+    this.videoContainer.appendChild(video);
+    this.currentVideo = video;
+
+    try {
+      await video.play();
+    } catch (e) {
+      console.warn('Video autoplay failed:', e);
+    }
   }
 
   async enterVideoMode() {
-  this.isVideoMode = true;
-  this.videoContainer.hidden = false;
-  this.container.style.opacity = '0';
-  await this.loadVideo(this.currentIndex, true);
+    const progress = this.getCurrentPanProgress();
+    
+    this.isVideoMode = true;
+    this.videoContainer.hidden = false;
+    this.container.style.opacity = '0';
+    await this.loadVideo(this.currentIndex, progress);
 
-  this.videoContainer.style.opacity = '1';
-  if (this.slideTimeout) clearTimeout(this.slideTimeout);
-
-  this.scheduleNextSlide();
+    this.videoContainer.style.opacity = '1';
+    if (this.slideTimeout) clearTimeout(this.slideTimeout);
   }
 
   exitVideoMode() {
-  this.isVideoMode = false;
-  this.showSlide(this.currentIndex);
-  document.documentElement.style.setProperty('--pan-duration', `${CONFIG.MOBILE_PAN_DURATION}ms`);
-
-  this.videoContainer.style.opacity = '0';
-  this.container.style.opacity = '1';
-  if (this.currentVideo) {
-    this.currentVideo.pause();
-    this.currentVideo.remove();
-    this.currentVideo = null;
-  }
-
-  setTimeout(() => {
-    this.videoContainer.hidden = true;
-    this.scheduleNextSlide();
-  }, 300);
-  }
-
-  pausePanAnimation() {
-  if (this.is3DMode) return;
-
-  const activeImg = this.container.querySelector('.image-slide.active img');
-  if (activeImg) activeImg.classList.add('pan-paused');
-
-  if (this.isVideoMode && this.videoContainer) {
-    this.videoContainer.classList.add('paused');
-    if (this.currentVideo && !this.currentVideo.paused) {
+    const progress = this.getCurrentPanProgress();
+    
+    this.isVideoMode = false;
+    
+    this.videoContainer.style.opacity = '0';
+    this.container.style.opacity = '1';
+    if (this.currentVideo) {
       this.currentVideo.pause();
-      this.videoWasPlaying = true;
+      this.currentVideo.remove();
+      this.currentVideo = null;
     }
-  }
-  }
 
-  resumePanAnimation() {
-  if (this.is3DMode) return;
+    setTimeout(() => {
+      this.videoContainer.hidden = true;
+    }, 300);
 
-  const activeImg = this.container.querySelector('.image-slide.active img');
-  if (activeImg) activeImg.classList.remove('pan-paused');
-
-  if (this.isVideoMode && this.videoContainer) {
-    this.videoContainer.classList.remove('paused');
-    if (this.currentVideo && this.videoWasPlaying) {
-      this.currentVideo.play().catch(() => {});
-      this.videoWasPlaying = false;
+    if (progress >= 0.99) {
+      this.nextSlide();
+    } else {
+      this.showSlide(this.currentIndex, progress);
     }
-  }
   }
 
   exit3DAndShowSlide(targetIndex) {
@@ -535,13 +575,18 @@ class ImageViewer {
     }
   }
   
-  showSlide(index) {
+  showSlide(index, startProgress = 0) {
     if (index < 0 || index >= this.images.length) return;
+    
+    if (startProgress >= 0.99) {
+      this.nextSlide();
+      return;
+    }
 
     this.currentIndex = index;
 
     if (this.isVideoMode) {
-      this.loadVideo(index, true);
+      this.loadVideo(index, startProgress);
       this.updateInfoBox(this.images[index]);
       return;
     }
@@ -550,16 +595,21 @@ class ImageViewer {
       const currentImg = this.images[index];
       this.splatViewer.loadSplat(currentImg.id, currentImg.focusY);
     } else {
-      this.slides.forEach(slide => {
+      this.slides.forEach((slide, i) => {
         const img = slide.querySelector('img');
         if (img) {
-          img.style.animation = 'none';
-          void img.offsetHeight;
           img.style.animation = '';
+          img.style.animationDelay = '';
+          void img.offsetHeight;
+          
+          if (i === index && startProgress > 0 && this.isMobile()) {
+            const duration = CONFIG.MOBILE_PAN_DURATION;
+            const delaySeconds = -(startProgress * (duration / 1000));
+            img.style.animation = `panRight ${duration}ms linear forwards`;
+            img.style.animationDelay = `${delaySeconds}s`;
+            img.style.animationPlayState = 'running';
+          }
         }
-      });
-      
-      this.slides.forEach((slide, i) => {
         slide.classList.toggle('active', i === index);
       });
     }
@@ -638,16 +688,9 @@ class ImageViewer {
   }
   
   scheduleNextSlide() {
-    if (this.is3DMode) return;
+    if (this.is3DMode || this.isMobile()) return;
 
-    let delay;
-    if (this.isVideoMode) {
-      // Video mode (mobile 3D) always uses 6 seconds
-      delay = 6000;
-    } else {
-      const isMobile = window.innerWidth <= 768;
-      delay = isMobile ? CONFIG.MOBILE_PAN_DURATION : CONFIG.DESKTOP_DURATION;
-    }
+    const delay = CONFIG.DESKTOP_DURATION;
 
     if (this.slideTimeout) clearTimeout(this.slideTimeout);
     
