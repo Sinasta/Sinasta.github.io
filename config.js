@@ -35,5 +35,5 @@ export const PROJECTS = [
   { id: 4, title: "Brunnenquartier - Karben", titleLink: "https://www.competitionline.com/de/news/ergebnisse/freiraumplanerische-gestaltung-brunnenquartier-in-karben-517453/prizegroup/2-preis-175890.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/karben", focusY: "50%", prize: 2 },
 //  { id: 3, title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "80%", prize: null },
 //  { id: 2, title: "Lausitzer Platz - Berlin", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/berlin", focusY: "55%", prize: null },
-  { id: 1, title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%", prize: 3 }
+//  { id: 1, title: "Moisling - Lübeck", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neubau-stadtteilhaus-moisling-in-luebeck-585323/prizegroup/3-preis-200457.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "50%", prize: 3 }
 ];
