@@ -11,8 +11,8 @@ export const CONFIG = {
 };
 
 export const PROJECTS = [
-  { id: 25, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
-  { id: 24, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
+//  { id: 25, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
+//  { id: 24, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
   { id: 23, title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
   { id: 22, title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
   { id: 21, title: "Mathildenhöhe - Darmstadt", titleLink: "https://www.competitionline.com/de/news/ergebnisse/neugestaltung-freiflaechen-am-informationszentrum-mathildenhoehe-in-darmstadt-634364/prizegroup/ein-1-preis-217143.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "85%", prize: 1 },
