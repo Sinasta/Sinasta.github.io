@@ -591,22 +591,30 @@ class ImageViewer {
       return;
     }
 
-    if (this.is3DMode && this.splatViewer) {
+    if (this.is3DMode && !this.isMobile() && this.splatViewer) {
       const currentImg = this.images[index];
       this.splatViewer.loadSplat(currentImg.id, currentImg.focusY);
+      this.preloadSplats(index);
     } else {
       this.slides.forEach((slide, i) => {
         const img = slide.querySelector('img');
         if (img) {
-          img.style.animation = '';
-          img.style.animationDelay = '';
-          void img.offsetHeight;
+          // Always reset animation to allow restart from beginning
+          img.style.animation = 'none';
+          void img.offsetHeight; // Force reflow
           
-          if (i === index && startProgress > 0 && this.isMobile()) {
+          if (i === index && this.isMobile()) {
             const duration = CONFIG.MOBILE_PAN_DURATION;
-            const delaySeconds = -(startProgress * (duration / 1000));
             img.style.animation = `panRight ${duration}ms linear forwards`;
-            img.style.animationDelay = `${delaySeconds}s`;
+            
+            if (startProgress > 0) {
+              // Resume from specific progress
+              const delaySeconds = -(startProgress * (duration / 1000));
+              img.style.animationDelay = `${delaySeconds}s`;
+            } else {
+              // Start from beginning
+              img.style.animationDelay = '0s';
+            }
             img.style.animationPlayState = 'running';
           }
         }
@@ -676,14 +684,48 @@ class ImageViewer {
   }
   
   preloadAhead(currentIndex) {
-    if (this.is3DMode || this.isVideoMode) return;
-    
-    for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
-      const nextIndex = currentIndex + i;
-      if (nextIndex < this.images.length) {
+    // Skip image preloading if in mobile video mode (we preload videos instead)
+    if (!(this.is3DMode && this.isMobile())) {
+      for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
+        const nextIndex = currentIndex + i;
+        if (nextIndex >= this.images.length) break;
+        
+        // Preload image
         const img = new Image();
         img.src = this.images[nextIndex].src;
       }
+    }
+    
+    // Preload videos for mobile 3D mode
+    if (this.isMobile()) {
+      for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
+        const nextIndex = currentIndex + i;
+        if (nextIndex >= this.images.length) break;
+        
+        const video = document.createElement('video');
+        video.src = this.images[nextIndex].videoSrc;
+        video.preload = 'auto';
+        video.muted = true; // Required for autoplay
+        video.load(); // Trigger preload
+      }
+    }
+    
+    // Preload splats for desktop 3D mode
+    if (this.is3DMode && !this.isMobile()) {
+      this.preloadSplats(currentIndex);
+    }
+  }
+  
+  preloadSplats(currentIndex) {
+    if (!this.is3DMode || this.isMobile()) return;
+    
+    for (let i = 1; i <= CONFIG.PRELOAD_COUNT; i++) {
+      const nextIndex = currentIndex + i;
+      if (nextIndex >= this.images.length) break;
+      
+      const url = `./splats/${this.images[nextIndex].id}.ply`;
+      // Preload into browser cache
+      fetch(url).catch(() => {});
     }
   }
   
@@ -706,7 +748,11 @@ class ImageViewer {
   
   nextSlide() {
     const nextIndex = (this.currentIndex + 1) % this.images.length;
-    if (this.is3DMode) {
+    
+    // Stay in 3D mode on desktop, exit on mobile (video mode)
+    if (this.is3DMode && !this.isMobile()) {
+      this.showSlide(nextIndex);
+    } else if (this.is3DMode && this.isMobile()) {
       this.exit3DAndShowSlide(nextIndex);
     } else {
       this.showSlide(nextIndex);
@@ -715,7 +761,10 @@ class ImageViewer {
 
   prevSlide() {
     const prevIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-    if (this.is3DMode) {
+    
+    if (this.is3DMode && !this.isMobile()) {
+      this.showSlide(prevIndex);
+    } else if (this.is3DMode && this.isMobile()) {
       this.exit3DAndShowSlide(prevIndex);
     } else {
       this.showSlide(prevIndex);
