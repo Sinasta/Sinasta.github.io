@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /assets/floor_plan_generation/
+
+Sitemap: https://raban-ohlhoff.com/sitemap.xml
