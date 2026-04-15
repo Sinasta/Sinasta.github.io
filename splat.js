@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SplatMesh } from '@sparkjsdev/spark';
+import { SparkRenderer, SplatMesh } from '@sparkjsdev/spark';
 
 export class SplatViewer {
     constructor(container) {
@@ -10,6 +10,7 @@ export class SplatViewer {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
+        this.spark = null;
         this.boundMouseMove = null;
         this.boundResize = null;
         this.isDisposed = false;
@@ -57,6 +58,9 @@ export class SplatViewer {
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
+        
+        this.spark = new SparkRenderer({ renderer });
+        scene.add(this.spark);
 
         this.boundMouseMove = (e) => {
             const hw = window.innerWidth / 2;
@@ -88,7 +92,6 @@ export class SplatViewer {
         if (!this.camera) return;
         
         const percent = parseFloat(focusYString) || 50;
-
         const offsetY = (percent - 50) * this.shiftScale;
         
         this.camera.setViewOffset(
@@ -113,16 +116,17 @@ export class SplatViewer {
         if (this.loadTimeout) clearTimeout(this.loadTimeout);
         
         if (this.currentSplatMesh) { 
-            this.scene.remove(this.currentSplatMesh); 
+            this.spark.remove(this.currentSplatMesh);
             if (this.currentSplatMesh.dispose) this.currentSplatMesh.dispose(); 
         }
         
-        const url = `./splats/${id}.ply`;
+        const url = `./splats/${id}.sog`;
         let hasLoaded = false;
         let hasError = false;
 
         const splatMesh = new SplatMesh({ 
             url: url,
+            lod: true,
             maxStdDev: Math.sqrt(5),
             integerBasedSort: true,
             minAlpha: 0.1,
@@ -149,7 +153,7 @@ export class SplatViewer {
         splatMesh.quaternion.set(1, 0, 0, 0);
         splatMesh.position.set(0, 0, 0);
         
-        this.scene.add(splatMesh); 
+        this.spark.add(splatMesh);
         this.currentSplatMesh = splatMesh;
 
         this.loadTimeout = setTimeout(() => {
@@ -197,10 +201,20 @@ export class SplatViewer {
             if (this.currentSplatMesh.dispose) {
                 this.currentSplatMesh.dispose();
             }
-            if (this.scene) {
-                this.scene.remove(this.currentSplatMesh);
+            if (this.spark) {
+                this.spark.remove(this.currentSplatMesh);
             }
             this.currentSplatMesh = null;
+        }
+
+        if (this.spark) {
+            if (this.spark.dispose) {
+                this.spark.dispose();
+            }
+            if (this.scene) {
+                this.scene.remove(this.spark);
+            }
+            this.spark = null;
         }
 
         if (this.renderer) {

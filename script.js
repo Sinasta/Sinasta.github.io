@@ -723,7 +723,7 @@ class ImageViewer {
       const nextIndex = currentIndex + i;
       if (nextIndex >= this.images.length) break;
       
-      const url = `./splats/${this.images[nextIndex].id}.ply`;
+      const url = `./splats/${this.images[nextIndex].id}.sog`;
       // Preload into browser cache
       fetch(url).catch(() => {});
     }
