@@ -11,8 +11,8 @@ export const CONFIG = {
 };
 
 export const PROJECTS = [
-  { id: 27, title: "Marktkirchenumfeld - Essen", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
-  { id: 26, title: "Marktkirchenumfeld - Essen", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
+  { id: 27, title: "Marktkirchenumfeld - Essen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gruen-blaues-innenstadtband-und-marktkirchenumfeld-in-essen-660102/prizegroup/2-preis-226606.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: 2 },
+  { id: 26, title: "Marktkirchenumfeld - Essen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/gruen-blaues-innenstadtband-und-marktkirchenumfeld-in-essen-660102/prizegroup/2-preis-226606.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: 2 },
   { id: 25, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "90%", prize: null },
   { id: 24, title: "Griesplatz - Graz", titleLink: null, office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe", focusY: "65%", prize: null },
   { id: 23, title: "LAGA - Sachsen", titleLink: "https://www.competitionline.com/de/news/ergebnisse/11-saechsische-landesgartenschau-in-auerbachvogtl-und-rodewisch-freudenthal-2029-579379/prizegroup/1-preis-198597.html", office: "TDB Landschaft", officeLink: "https://www.tdb-berlin.de/wettbewerbe/landesgartenschau-sachsen", focusY: "70%", prize: 1 },
